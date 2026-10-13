@@ -1,0 +1,121 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ 'Edit' if obj else 'New' }} team member{% endblock %}
+{% block heading %}{{ 'Edit' if obj else 'New' }} team member{% endblock %}
+{% block subheading %}Cofounders, national heads and contributors{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between gap-4">
+  <a href="{{ url_for('admin.team_list') }}" class="btn-ghost !py-2 !text-xs">← Back to team</a>
+  {% if obj %}
+    <a href="{{ url_for('public.team') }}" class="btn-ghost !py-2 !text-xs" target="_blank">View live ↗</a>
+  {% endif %}
+</div>
+
+<form method="post" enctype="multipart/form-data" class="mt-5 grid gap-6 lg:grid-cols-3">
+  {{ form.hidden_tag() }}
+
+  <div class="space-y-6 lg:col-span-2">
+    <div class="card p-6">
+      <div class="grid gap-5">
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="name">Full name *</label>
+            {{ form.name(class_='field', id='name') }}
+            {% for error in form.name.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+          </div>
+          <div>
+            <label class="field-label" for="role">Role</label>
+            {{ form.role(class_='field', id='role', placeholder='Co-Founder') }}
+          </div>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-3">
+          <div>
+            <label class="field-label" for="group">Group</label>
+            {{ form.group(class_='field', id='group') }}
+          </div>
+          <div>
+            <label class="field-label" for="country">Country</label>
+            {{ form.country(class_='field', id='country', placeholder='Nepal') }}
+          </div>
+          <div>
+            <label class="field-label" for="slug">Slug</label>
+            {{ form.slug(class_='field', id='slug') }}
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label" for="bio">Biography</label>
+          {{ form.bio(class_='field !text-[13px]', id='bio', rows='12', placeholder='One fact per line — line breaks are preserved.') }}
+        </div>
+
+        <div>
+          <label class="field-label" for="skills">Skills / interests</label>
+          {{ form.skills(class_='field', id='skills', placeholder='Artificial Intelligence, Machine Learning') }}
+          <p class="mt-1.5 text-[11px] text-mist-soft">Comma separated.</p>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-3">
+          <div>
+            <label class="field-label" for="github_url">GitHub</label>
+            {{ form.github_url(class_='field', id='github_url', placeholder='https://github.com/…') }}
+            {% for error in form.github_url.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+          </div>
+          <div>
+            <label class="field-label" for="linkedin_url">LinkedIn</label>
+            {{ form.linkedin_url(class_='field', id='linkedin_url', placeholder='https://linkedin.com/in/…') }}
+            {% for error in form.linkedin_url.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+          </div>
+          <div>
+            <label class="field-label" for="website_url">Website</label>
+            {{ form.website_url(class_='field', id='website_url', placeholder='https://…') }}
+            {% for error in form.website_url.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Portrait</p>
+      <div class="mt-4 aspect-square overflow-hidden rounded-xl border border-white/10 bg-ink-850">
+        {% set image = form.portrait.data or (obj.portrait if obj else '') %}
+        <img id="portrait-preview" src="{{ image if image and image.startswith('http') else (url_for('static', filename=image) if image else '') }}"
+             alt="" class="h-full w-full object-cover {{ '' if image else 'hidden' }}">
+        {% if not image %}<div class="flex h-full items-center justify-center text-xs text-mist-soft">No portrait selected</div>{% endif %}
+      </div>
+      <div class="mt-4">
+        <label class="field-label" for="portrait_upload">Upload</label>
+        {{ form.portrait_upload(class_='field !px-3 !py-2 text-xs', id='portrait_upload', accept='image/*', data_preview='#portrait-preview') }}
+        {% for error in form.portrait_upload.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+      </div>
+      {% if image %}
+        <label class="field-label mt-4" for="portrait">…or keep an existing path / paste a URL</label>
+        {{ form.portrait(class_='field', id='portrait') }}
+      {% endif %}
+    </div>
+
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Visibility</p>
+      <div class="mt-5 grid gap-4">
+        <label class="flex items-center gap-3 text-sm text-mist">
+          {{ form.is_active(class_='h-4 w-4 rounded accent-accent') }}
+          <span>Visible on the website</span>
+        </label>
+        <label class="flex items-center gap-3 text-sm text-mist">
+          {{ form.featured(class_='h-4 w-4 rounded accent-accent') }}
+          <span>Feature on the homepage</span>
+        </label>
+        <div>
+          <label class="field-label" for="sort_order">Sort order</label>
+          {{ form.sort_order(class_='field', id='sort_order', placeholder='0') }}
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-primary w-full">{{ form.submit.label.text }}</button>
+  </div>
+</form>
+{% endblock %}

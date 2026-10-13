@@ -1,0 +1,116 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ 'Edit' if obj else 'New' }} {{ label|lower }}{% endblock %}
+{% block heading %}{{ 'Edit' if obj else 'New' }} {{ label|lower }}{% endblock %}
+{% block subheading %}Dates, location, registration and status{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between gap-4">
+  <a href="{{ url_for('admin.events_list') if kind == 'events' else url_for('admin.competitions_list') }}" class="btn-ghost !py-2 !text-xs">← Back to {{ kind }}</a>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="mt-5 grid gap-6 lg:grid-cols-3">
+  {{ form.hidden_tag() }}
+
+  <div class="space-y-6 lg:col-span-2">
+    <div class="card p-6">
+      <div class="grid gap-5">
+        <div>
+          <label class="field-label" for="title">Title *</label>
+          {{ form.title(class_='field', id='title') }}
+          {% for error in form.title.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="slug">Slug</label>
+            {{ form.slug(class_='field', id='slug') }}
+          </div>
+          <div>
+            <label class="field-label" for="category">Category</label>
+            {{ form.category(class_='field', id='category', placeholder='Competition') }}
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label" for="summary">Summary</label>
+          {{ form.summary(class_='field', id='summary') }}
+        </div>
+
+        <div>
+          <label class="field-label" for="description">Description (Markdown)</label>
+          {{ form.description(class_='field font-mono !text-[13px]', id='description', rows='14') }}
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Schedule &amp; location</p>
+      <div class="mt-5 grid gap-5 sm:grid-cols-2">
+        <div>
+          <label class="field-label" for="starts_at">Starts</label>
+          {{ form.starts_at(class_='field', id='starts_at') }}
+        </div>
+        <div>
+          <label class="field-label" for="ends_at">Ends</label>
+          {{ form.ends_at(class_='field', id='ends_at') }}
+        </div>
+        <div>
+          <label class="field-label" for="mode">Mode</label>
+          {{ form.mode(class_='field', id='mode') }}
+        </div>
+        <div>
+          <label class="field-label" for="location">Location</label>
+          {{ form.location(class_='field', id='location', placeholder='Online — Kaggle') }}
+        </div>
+        <div>
+          <label class="field-label" for="registration_deadline">Registration deadline</label>
+          {{ form.registration_deadline(class_='field', id='registration_deadline') }}
+        </div>
+        <div>
+          <label class="field-label" for="registration_url">Registration link</label>
+          {{ form.registration_url(class_='field', id='registration_url', placeholder='https://…') }}
+          {% for error in form.registration_url.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Status</p>
+      <div class="mt-5 grid gap-5">
+        <div>
+          <label class="field-label" for="status">Current status</label>
+          {{ form.status(class_='field', id='status') }}
+        </div>
+        <div>
+          <label class="field-label" for="sort_order">Sort order</label>
+          {{ form.sort_order(class_='field', id='sort_order') }}
+        </div>
+        <div>
+          <label class="field-label" for="meta_description">Meta description (SEO)</label>
+          {{ form.meta_description(class_='field', id='meta_description', rows='3') }}
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Image</p>
+      <div class="mt-4 overflow-hidden rounded-xl border border-white/10 bg-ink-850">
+        {% set image = form.image.data or (obj.image if obj else '') %}
+        <img id="event-image-preview" src="{{ image if image and image.startswith('http') else (url_for('public.media', filename=image) if image else '') }}"
+             alt="" class="h-36 w-full object-cover {{ '' if image else 'hidden' }}">
+        {% if not image %}<div class="flex h-36 items-center justify-center text-xs text-mist-soft">No image selected</div>{% endif %}
+      </div>
+      <div class="mt-4">
+        <label class="field-label" for="image_upload">Upload</label>
+        {{ form.image_upload(class_='field !px-3 !py-2 text-xs', id='image_upload', accept='image/*', data_preview='#event-image-preview') }}
+        {% for error in form.image_upload.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+      </div>
+    </div>
+
+    <button type="submit" class="btn-primary w-full">{{ form.submit.label.text }}</button>
+  </div>
+</form>
+{% endblock %}

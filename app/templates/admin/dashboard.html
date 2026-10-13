@@ -1,0 +1,86 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block subheading %}Overview of everything published on the site{% endblock %}
+
+{% block content %}
+<section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+  {% set cards = [
+    ('projects', 'Projects', url_for('admin.projects_list')),
+    ('posts', 'Blog posts', url_for('admin.posts_list')),
+    ('team', 'Team members', url_for('admin.team_list')),
+    ('announcements', 'Announcements', url_for('admin.announcements_list')),
+    ('events', 'Events', url_for('admin.events_list')),
+    ('competitions', 'Competitions', url_for('admin.competitions_list')),
+    ('messages', 'Contact messages', url_for('admin.messages_list')),
+    ('unread', 'Unread messages', url_for('admin.messages_list')),
+  ] %}
+  {% for key, label, href in cards %}
+    <a href="{{ href }}" class="card card-glow card-hover p-5">
+      <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-mist-soft">{{ label }}</p>
+      <p class="mt-3 font-display text-3xl text-mist-bright">{{ stats.get(key, 0) }}</p>
+    </a>
+  {% endfor %}
+</section>
+
+<section class="mt-8 grid gap-6 lg:grid-cols-3">
+  <!-- ------------------------------------------------------- quick actions -->
+  <div class="card p-6">
+    <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Quick actions</p>
+    <div class="mt-5 grid gap-2">
+      <a class="btn-primary !justify-start" href="{{ url_for('admin.project_new') }}">+ New project</a>
+      <a class="btn-ghost !justify-start" href="{{ url_for('admin.post_new') }}">+ New blog post</a>
+      <a class="btn-ghost !justify-start" href="{{ url_for('admin.team_new') }}">+ Add team member</a>
+      <a class="btn-ghost !justify-start" href="{{ url_for('admin.announcement_new') }}">+ New announcement</a>
+      <a class="btn-ghost !justify-start" href="{{ url_for('admin.event_new', kind='events') }}">+ New event</a>
+      <a class="btn-ghost !justify-start" href="{{ url_for('admin.event_new', kind='competitions') }}">+ New competition</a>
+      <a class="btn-ghost !justify-start" href="{{ url_for('admin.settings_page') }}">Edit homepage text</a>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------------------- drafts -->
+  <div class="card p-6">
+    <div class="flex items-center justify-between">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Drafts &amp; unpublished</p>
+      <span class="badge">{{ drafts|length }}</span>
+    </div>
+    <ul class="mt-5 space-y-3">
+      {% for item in drafts %}
+        <li class="flex items-start justify-between gap-3 border-b border-white/[0.06] pb-3 last:border-0">
+          <div class="min-w-0">
+            <p class="truncate text-sm text-mist-bright">{{ item.title }}</p>
+            <p class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-mist-soft">{{ item.__class__.__name__ }}</p>
+          </div>
+          <span class="badge badge-draft flex-none">{{ item.status }}</span>
+        </li>
+      {% else %}
+        <li class="text-sm text-mist-soft">Everything is published. Nice.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- ----------------------------------------------------------- messages -->
+  <div class="card p-6">
+    <div class="flex items-center justify-between">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Latest messages</p>
+      <a href="{{ url_for('admin.messages_list') }}" class="text-xs text-accent-soft hover:text-mist-bright">View all</a>
+    </div>
+    <ul class="mt-5 space-y-3">
+      {% for message in latest_messages %}
+        <li>
+          <a href="{{ url_for('admin.message_detail', item_id=message.id) }}" class="block border-b border-white/[0.06] pb-3 transition hover:text-mist-bright">
+            <p class="flex items-center gap-2 text-sm">
+              {% if not message.is_read %}<span class="h-1.5 w-1.5 rounded-full bg-accent"></span>{% endif %}
+              <span class="truncate">{{ message.name }} — {{ message.subject }}</span>
+            </p>
+            <p class="mt-1 text-xs text-mist-soft">{{ message.created_at|datefmt('%b %d, %Y %H:%M') }}</p>
+          </a>
+        </li>
+      {% else %}
+        <li class="text-sm text-mist-soft">No contact messages yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endblock %}

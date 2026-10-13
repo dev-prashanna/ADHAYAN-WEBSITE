@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% from "_macros.html" import page_header, empty_state %}
+
+{% macro event_card(item) -%}
+<article class="card card-glow card-hover flex flex-col overflow-hidden reveal">
+  <div class="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+    {% if item.image %}
+      <img src="{{ item.image if item.image.startswith('http') else url_for('public.media', filename=item.image) }}"
+           alt="{{ item.title }}" loading="lazy" decoding="async"
+           class="h-full w-full object-cover">
+    {% else %}
+      <div class="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_70%_10%,rgba(139,92,246,.25),transparent_60%)]">
+        <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">{{ item.type_label }}</span>
+      </div>
+    {% endif %}
+    <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">{{ item.type_label }}</span>
+    {% if item.status == 'upcoming' %}
+      <span class="absolute right-3 top-3 badge badge-live bg-ink-950/70 backdrop-blur">Upcoming</span>
+    {% elif item.status == 'completed' %}
+      <span class="absolute right-3 top-3 badge bg-ink-950/70 backdrop-blur">Completed</span>
+    {% else %}
+      <span class="absolute right-3 top-3 badge badge-soon bg-ink-950/70 backdrop-blur">Cancelled</span>
+    {% endif %}
+  </div>
+
+  <div class="flex flex-1 flex-col p-6">
+    {% if item.category %}<p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">{{ item.category }}</p>{% endif %}
+    <h3 class="mt-3 font-display text-xl leading-snug">{{ item.title }}</h3>
+    {% if item.summary %}<p class="mt-3 flex-1 text-sm leading-relaxed text-mist">{{ item.summary|truncate(160) }}</p>{% endif %}
+
+    <dl class="mt-5 space-y-2 border-t border-white/[0.07] pt-4 text-xs text-mist-soft">
+      {% if item.starts_at %}
+      <div class="flex items-center justify-between gap-3">
+        <dt>Date</dt>
+        <dd class="text-mist">{{ item.starts_at|datefmt('%B %d, %Y') }}{% if item.ends_at %} – {{ item.ends_at|datefmt('%B %d, %Y') }}{% endif %}</dd>
+      </div>
+      {% endif %}
+      <div class="flex items-center justify-between gap-3">
+        <dt>Mode</dt>
+        <dd class="text-mist">{{ item.mode|replace('_', ' ')|title }}{% if item.location %} · {{ item.location }}{% endif %}</dd>
+      </div>
+      {% if item.registration_deadline %}
+      <div class="flex items-center justify-between gap-3">
+        <dt>Register by</dt>
+        <dd class="text-mist">{{ item.registration_deadline|datefmt('%B %d, %Y') }}</dd>
+      </div>
+      {% endif %}
+    </dl>
+
+    <div class="mt-5">
+      {% if item.registration_url and item.status == 'upcoming' %}
+        <a class="btn-primary w-full" href="{{ item.registration_url }}" target="_blank" rel="noopener noreferrer">Register ↗</a>
+      {% elif item.status == 'completed' %}
+        <span class="btn-ghost w-full opacity-70">Event completed</span>
+      {% else %}
+        <span class="btn-ghost w-full opacity-70">Details to follow</span>
+      {% endif %}
+    </div>
+  </div>
+</article>
+{%- endmacro %}
+
+{% block content %}
+{{ page_header('ADHAYAN / PROGRAMME', page_title, s('events_page_intro')) }}
+
+<section class="section">
+  <div class="shell">
+    <div class="flex flex-wrap items-center gap-2 reveal">
+      <a href="{{ url_for('public.events') }}" class="chip {{ 'chip-active' if active_kind == 'all' }}">All</a>
+      <a href="{{ url_for('public.events', type='events') }}" class="chip {{ 'chip-active' if active_kind == 'events' }}">Events</a>
+      <a href="{{ url_for('public.events', type='competitions') }}" class="chip {{ 'chip-active' if active_kind == 'competitions' }}">Competitions</a>
+    </div>
+
+    <div class="mt-12">
+      <div class="flex items-center gap-4">
+        <p class="eyebrow">Upcoming</p>
+        <span class="h-px flex-1 bg-white/10"></span>
+      </div>
+      <div class="mt-7 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {% for item in upcoming %}{{ event_card(item) }}{% endfor %}
+        {% if not upcoming %}
+          <div class="md:col-span-2 lg:col-span-3">{{ empty_state('No upcoming events right now. Subscribe on LinkedIn to hear first.') }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="mt-16">
+      <div class="flex items-center gap-4">
+        <p class="eyebrow">Completed</p>
+        <span class="h-px flex-1 bg-white/10"></span>
+      </div>
+      <div class="mt-7 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {% for item in completed %}{{ event_card(item) }}{% endfor %}
+        {% if not completed %}
+          <div class="md:col-span-2 lg:col-span-3">
+            <p class="text-sm text-mist-soft">Completed events and competitions will be archived here.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

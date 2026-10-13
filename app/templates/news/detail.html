@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.title }}{% endblock %}
+{% block og_title %}{{ item.title }}{% endblock %}
+{% block tw_title %}{{ item.title }}{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+{% endblock %}
+
+{% block content %}
+<section class="relative overflow-hidden border-b border-white/[0.06] pt-10 pb-12 sm:pt-14">
+  <div class="pointer-events-none absolute inset-0 grid-bg opacity-50"></div>
+  <div class="shell relative">
+    <nav aria-label="Breadcrumb" class="font-mono text-[11px] uppercase tracking-[0.2em] text-mist-soft">
+      <a href="{{ url_for('public.news') }}" class="hover:text-accent-soft">News</a>
+      <span class="mx-2">/</span>
+      <span class="text-mist">{{ item.category }}</span>
+    </nav>
+
+    <h1 class="display-lg mt-6 max-w-4xl text-balance">{{ item.title }}</h1>
+
+    <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-mist-soft">
+      <time datetime="{{ item.published_at.strftime('%Y-%m-%d') }}">{{ item.published_at|datefmt('%B %d, %Y') }}</time>
+      <span class="h-1 w-1 rounded-full bg-white/20"></span>
+      <span>{{ item.category }}</span>
+    </div>
+  </div>
+</section>
+
+<article class="section">
+  <div class="shell">
+    <div class="mx-auto max-w-3xl">
+      {% if item.image %}
+        <img src="{{ item.image if item.image.startswith('http') else url_for('public.media', filename=item.image) }}"
+             alt="{{ item.title }}" loading="lazy" decoding="async"
+             class="mb-10 w-full rounded-2xl border border-white/10 object-cover">
+      {% endif %}
+
+      {% if item.summary %}
+        <p class="mb-8 border-l-2 border-accent/60 pl-5 text-lg italic leading-relaxed text-mist-bright">{{ item.summary }}</p>
+      {% endif %}
+
+      <div class="prose-adhayan">{{ item.body|markdown }}</div>
+
+      <div class="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.07] pt-8">
+        <a href="{{ url_for('public.news') }}" class="btn-ghost">← All news</a>
+        {% if s('linkedin_url') %}
+          <a class="btn-primary" href="{{ s('linkedin_url') }}" target="_blank" rel="noopener noreferrer">Follow ADHAYAN ↗</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</article>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (typeof renderMathInElement === "function") {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    }
+  });
+</script>
+{% endblock %}

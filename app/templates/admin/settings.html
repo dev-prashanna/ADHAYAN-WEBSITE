@@ -1,0 +1,72 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Site settings{% endblock %}
+{% block heading %}Site settings{% endblock %}
+{% block subheading %}Every headline, description and label on the public site{% endblock %}
+
+{% block content %}
+<div class="grid gap-6 lg:grid-cols-[1fr_320px]">
+  <form method="post" class="space-y-6">
+    {{ form.hidden_tag() }}
+
+    {% for group, rows in groups.items() %}
+    <section class="card p-6">
+      <div class="flex items-center justify-between gap-3">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">{{ group }}</p>
+        <span class="badge">{{ rows|length }} fields</span>
+      </div>
+
+      <div class="mt-6 grid gap-5 {% if group in ('Homepage', 'SEO') %}sm:grid-cols-2{% endif %}">
+        {% for row in rows %}
+          <div class="{% if row.field_type == 'textarea' or row.field_type == 'markdown' %}sm:col-span-2{% endif %}">
+            <label class="field-label" for="{{ row.key }}">{{ row.label or row.key }}</label>
+            {% if row.field_type in ('textarea', 'markdown') %}
+              <textarea class="field !text-[13px] leading-relaxed" name="{{ row.key }}" id="{{ row.key }}" rows="4">{{ row.value }}</textarea>
+            {% elif row.field_type == 'boolean' %}
+              <label class="flex items-center gap-3 text-sm text-mist">
+                <input type="checkbox" name="{{ row.key }}" value="1" class="h-4 w-4 rounded accent-accent" {{ 'checked' if row.value in ('1', 'true', 'True') }}>
+                <span>Enabled</span>
+              </label>
+            {% else %}
+              <input class="field" type="text" name="{{ row.key }}" id="{{ row.key }}" value="{{ row.value }}">
+            {% endif %}
+            <p class="mt-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-mist-soft/70">{{ row.key }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+
+    <div class="sticky bottom-4 z-10 flex flex-wrap gap-3 rounded-2xl border border-white/10 bg-ink-900/90 p-4 backdrop-blur">
+      <button type="submit" class="btn-primary">Save settings</button>
+      <a href="{{ url_for('public.index') }}" class="btn-ghost" target="_blank">Preview website ↗</a>
+    </div>
+  </form>
+
+  <aside class="space-y-5">
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">How this works</p>
+      <ul class="mt-4 space-y-3 text-sm leading-relaxed text-mist">
+        <li>· Values here are read by every public template — nothing is hard-coded.</li>
+        <li>· Blank values fall back to sensible defaults.</li>
+        <li>· <strong class="text-mist-bright">Hero headline</strong> and descriptions live under <em>Homepage</em>.</li>
+        <li>· <strong class="text-mist-bright">Site URL</strong> under <em>Branding</em> is used for sitemap and social tags — set it to your production domain.</li>
+      </ul>
+    </div>
+
+    <form method="post" action="{{ url_for('admin.settings_reset') }}"
+          onsubmit="return confirm('Restore the original default copy? Existing content records (projects, posts, team) are not touched.');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="btn-ghost w-full">Restore default copy</button>
+    </form>
+
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Content sources</p>
+      <p class="mt-4 text-sm leading-relaxed text-mist">
+        The default copy was imported from the original ADHAYAN repository and brand
+        documentation. You can edit any of it here without touching code.
+      </p>
+    </div>
+  </aside>
+</div>
+{% endblock %}

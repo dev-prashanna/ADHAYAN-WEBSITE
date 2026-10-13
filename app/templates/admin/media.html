@@ -1,0 +1,37 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Media{% endblock %}
+{% block heading %}Media library{% endblock %}
+{% block subheading %}Images stored on the persistent disk{% endblock %}
+
+{% block content %}
+<div class="card p-6">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">{{ files|length }} file{{ '' if files|length == 1 else 's' }}</p>
+    <p class="text-xs text-mist-soft">Uploads happen from the project, post, team, news and event forms.</p>
+  </div>
+</div>
+
+<div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+  {% for file in files %}
+  <div class="card overflow-hidden">
+    <div class="aspect-square bg-ink-850">
+      <img src="{{ file.url }}" alt="" loading="lazy" class="h-full w-full object-cover">
+    </div>
+    <div class="p-3">
+      <p class="truncate font-mono text-[10px] text-mist-soft" title="{{ file.path }}">{{ file.path }}</p>
+      <div class="mt-2 flex items-center justify-between gap-2">
+        <span class="text-[10px] text-mist-soft">{{ (file.size / 1024)|round(0)|int }} KB</span>
+        <form method="post" action="{{ url_for('admin.media_delete') }}" onsubmit="return confirm('Delete this file?');">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="path" value="{{ file.path }}">
+          <button type="submit" class="text-[10px] uppercase tracking-wider text-red-300/80 hover:text-red-200">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <p class="text-sm text-mist-soft sm:col-span-2 lg:col-span-4">No uploaded images yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

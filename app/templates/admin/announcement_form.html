@@ -1,0 +1,96 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ 'Edit' if obj else 'New' }} announcement{% endblock %}
+{% block heading %}{{ 'Edit' if obj else 'New' }} announcement{% endblock %}
+{% block subheading %}News shown in the newsroom and on the homepage{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between gap-4">
+  <a href="{{ url_for('admin.announcements_list') }}" class="btn-ghost !py-2 !text-xs">← Back to announcements</a>
+  {% if obj %}
+    <a href="{{ url_for('public.news_detail', slug=obj.slug) }}" class="btn-ghost !py-2 !text-xs" target="_blank">View live ↗</a>
+  {% endif %}
+</div>
+
+<form method="post" enctype="multipart/form-data" class="mt-5 grid gap-6 lg:grid-cols-3">
+  {{ form.hidden_tag() }}
+
+  <div class="space-y-6 lg:col-span-2">
+    <div class="card p-6">
+      <div class="grid gap-5">
+        <div>
+          <label class="field-label" for="title">Title *</label>
+          {{ form.title(class_='field', id='title') }}
+          {% for error in form.title.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="slug">Slug</label>
+            {{ form.slug(class_='field', id='slug') }}
+          </div>
+          <div>
+            <label class="field-label" for="category">Category</label>
+            {{ form.category(class_='field', id='category', placeholder='Announcement') }}
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label" for="summary">Summary</label>
+          {{ form.summary(class_='field', id='summary', placeholder='One sentence shown on cards') }}
+        </div>
+
+        <div>
+          <label class="field-label" for="body">Body (Markdown)</label>
+          {{ form.body(class_='field font-mono !text-[13px]', id='body', rows='16', placeholder='Announcement text in Markdown.') }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Publish</p>
+      <div class="mt-5 grid gap-5">
+        <div>
+          <label class="field-label" for="status">Status</label>
+          {{ form.status(class_='field', id='status') }}
+        </div>
+        <div>
+          <label class="field-label" for="published_at">Publish date</label>
+          {{ form.published_at(class_='field', id='published_at') }}
+        </div>
+        <label class="flex items-center gap-3 text-sm text-mist">
+          {{ form.featured(class_='h-4 w-4 rounded accent-accent') }}
+          <span>Feature on the homepage</span>
+        </label>
+        <div>
+          <label class="field-label" for="sort_order">Sort order</label>
+          {{ form.sort_order(class_='field', id='sort_order') }}
+        </div>
+        <div>
+          <label class="field-label" for="meta_description">Meta description (SEO)</label>
+          {{ form.meta_description(class_='field', id='meta_description', rows='3') }}
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Image</p>
+      <div class="mt-4 overflow-hidden rounded-xl border border-white/10 bg-ink-850">
+        {% set image = form.image.data or (obj.image if obj else '') %}
+        <img id="image-preview" src="{{ image if image and image.startswith('http') else (url_for('public.media', filename=image) if image else '') }}"
+             alt="" class="h-36 w-full object-cover {{ '' if image else 'hidden' }}">
+        {% if not image %}<div class="flex h-36 items-center justify-center text-xs text-mist-soft">No image selected</div>{% endif %}
+      </div>
+      <div class="mt-4">
+        <label class="field-label" for="image_upload">Upload</label>
+        {{ form.image_upload(class_='field !px-3 !py-2 text-xs', id='image_upload', accept='image/*', data_preview='#image-preview') }}
+        {% for error in form.image_upload.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+      </div>
+    </div>
+
+    <button type="submit" class="btn-primary w-full">{{ form.submit.label.text }}</button>
+  </div>
+</form>
+{% endblock %}

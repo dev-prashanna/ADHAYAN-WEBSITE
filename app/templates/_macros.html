@@ -1,0 +1,34 @@
+{% macro page_header(eyebrow, title, intro='') -%}
+<section class="relative overflow-hidden border-b border-white/[0.06] pt-16 pb-14 sm:pt-24 sm:pb-20">
+  <div class="pointer-events-none absolute inset-0 grid-bg opacity-60"></div>
+  <div class="shell relative">
+    <p class="eyebrow">{{ eyebrow }}</p>
+    <h1 class="display-lg mt-6 max-w-3xl text-balance">{{ title }}</h1>
+    {% if intro %}
+      <p class="lead mt-6 max-w-2xl">{{ intro }}</p>
+    {% endif %}
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro empty_state(message) -%}
+<div class="card flex flex-col items-center gap-3 p-12 text-center">
+  <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">Nothing here yet</span>
+  <p class="max-w-md text-sm text-mist">{{ message }}</p>
+</div>
+{%- endmacro %}
+
+{% macro media_url(path) -%}
+{%- if path.startswith('http') %}{{ path }}{% else %}{{ url_for('public.media', filename=path) }}{% endif %}
+{%- endmacro %}
+
+{% macro bg_video(name) -%}
+<div class="bg-video-wrap" aria-hidden="true">
+  <video class="bg-video" autoplay muted loop playsinline disablepictureinpicture
+         preload="metadata" tabindex="-1"
+         poster="{{ url_for('static', filename='videos/' ~ name ~ '.jpg') }}">
+    <source src="{{ url_for('static', filename='videos/' ~ name ~ '.mp4') }}" type="video/mp4">
+  </video>
+  <div class="bg-video-overlay"></div>
+</div>
+{%- endmacro %}

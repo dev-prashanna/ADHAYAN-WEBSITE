@@ -1,0 +1,100 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ cfg.label }}{% endblock %}
+{% block heading %}{{ cfg.label }}{% endblock %}
+{% block subheading %}Create, edit and publish {{ cfg.label|lower }}{% endblock %}
+
+{% block content %}
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-mist-soft">
+    {{ items|length }} record{{ '' if items|length == 1 else 's' }}
+  </p>
+  <a href="{{ cfg.new_url }}" class="btn-primary">
+    + New {{ cfg.label|lower|replace('posts', 'post')|replace('members', 'member') }}
+  </a>
+</div>
+
+<div class="card mt-5 overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-white/10 bg-white/[0.03] text-left font-mono text-[10px] uppercase tracking-[0.18em] text-mist-soft">
+          <th class="px-5 py-3 font-medium">{{ 'Name' if kind == 'team' else 'Title' }}</th>
+          <th class="px-5 py-3 font-medium">
+            {% if kind == 'team' %}Role{% elif kind in ('events', 'competitions') %}Date{% else %}Category{% endif %}
+          </th>
+          <th class="px-5 py-3 font-medium">Status</th>
+          <th class="px-5 py-3 font-medium">Updated</th>
+          <th class="px-5 py-3 text-right font-medium">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr class="border-b border-white/[0.06] transition last:border-0 hover:bg-white/[0.02]">
+          <td class="px-5 py-4">
+            <div class="flex items-center gap-3">
+              {% set image = item.cover_image if kind in ('projects', 'posts') else (item.portrait if kind == 'team' else item.image) %}
+              {% if image %}
+                <img src="{{ image if image.startswith(('http', '/static/')) else (url_for('static', filename=image) if kind == 'team' else url_for('public.media', filename=image)) }}"
+                     alt="" class="h-9 w-9 flex-none rounded-lg object-cover">
+              {% else %}
+                <span class="flex h-9 w-9 flex-none items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] font-mono text-[10px] uppercase text-mist-soft">
+                  {{ (item[cfg.name_field] or '?')[:2] }}
+                </span>
+              {% endif %}
+              <div class="min-w-0">
+                <p class="truncate font-medium text-mist-bright">{{ item[cfg.name_field] }}</p>
+                <p class="truncate font-mono text-[10px] text-mist-soft">/{{ item.slug }}</p>
+              </div>
+            </div>
+          </td>
+          <td class="px-5 py-4 text-mist">
+            {% if kind == 'team' %}
+              {{ item.role }}
+            {% elif kind in ('events', 'competitions') %}
+              {{ item.starts_at|datefmt('%b %d, %Y') if item.starts_at else '—' }}
+            {% else %}
+              {{ item.category or '—' }}
+            {% endif %}
+          </td>
+          <td class="px-5 py-4">
+            {% if kind in ('events', 'competitions') %}
+              <span class="badge {{ 'badge-live' if item.status == 'upcoming' else ('badge-soon' if item.status == 'cancelled' else '') }}">{{ item.status }}</span>
+            {% elif kind == 'team' %}
+              <span class="badge {{ 'badge-live' if item.is_active else 'badge-draft' }}">{{ 'visible' if item.is_active else 'hidden' }}</span>
+            {% else %}
+              <span class="badge {{ 'badge-live' if item.status == 'published' else 'badge-draft' }}">{{ item.status }}</span>
+            {% endif %}
+          </td>
+          <td class="px-5 py-4 text-xs text-mist-soft">{{ item.updated_at|datefmt('%b %d, %Y') }}</td>
+          <td class="px-5 py-4">
+            <div class="flex items-center justify-end gap-2">
+              {% if kind == 'team' %}
+                <form method="post" action="{{ url_for('admin.team_move', item_id=item.id, direction='up') }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button type="submit" class="icon-btn" title="Move up" aria-label="Move {{ item.name }} up">↑</button>
+                </form>
+                <form method="post" action="{{ url_for('admin.team_move', item_id=item.id, direction='down') }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button type="submit" class="icon-btn" title="Move down" aria-label="Move {{ item.name }} down">↓</button>
+                </form>
+              {% endif %}
+              <a href="{{ cfg.edit_url(item.id) }}" class="icon-btn" title="Edit" aria-label="Edit {{ item[cfg.name_field] }}">Edit</a>
+              <form method="post" action="{{ cfg.delete_url(item.id) }}"
+                    onsubmit="return confirm('Delete this {{ cfg.label|lower|replace('posts', 'post')|replace('members', 'member') }}? This cannot be undone.');">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="icon-btn hover:border-red-400/40 hover:text-red-300" title="Delete" aria-label="Delete {{ item[cfg.name_field] }}">Del</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5" class="px-5 py-14 text-center text-mist-soft">Nothing here yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

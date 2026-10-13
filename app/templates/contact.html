@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% from "_macros.html" import page_header %}
+
+{% block content %}
+{{ page_header('ADHAYAN / CONTACT', page_title, s('contact_page_intro')) }}
+
+<section class="section">
+  <div class="shell grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+    <!-- ------------------------------------------------------------ form -->
+    <div class="card p-7 reveal sm:p-10">
+      {% if sent %}
+        <div class="flex flex-col items-start gap-4">
+          <span class="badge badge-live">Message received</span>
+          <h2 class="display-md">Thank you for reaching out.</h2>
+          <p class="lead">Your message has been recorded and the ADHAYAN team will get back to you.
+            For anything urgent, please use the official LinkedIn page.</p>
+          <a class="btn-primary mt-2" href="{{ url_for('public.index') }}">Back to the homepage</a>
+        </div>
+      {% else %}
+        <h2 class="display-md">Send us a message</h2>
+        <p class="mt-3 text-sm text-mist-soft">All fields except subject are required. We usually reply within a few days.</p>
+
+        <form method="post" action="{{ url_for('public.contact') }}" class="mt-8 space-y-5" novalidate>
+          {{ form.hidden_tag() }}
+          {# honeypot #}
+          <div class="hidden" aria-hidden="true">
+            <label for="website">Website</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label class="field-label" for="name">Name</label>
+              {{ form.name(class_='field', id='name', placeholder='Your name') }}
+              {% for error in form.name.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+            </div>
+            <div>
+              <label class="field-label" for="email">Email</label>
+              {{ form.email(class_='field', id='email', placeholder='you@example.com') }}
+              {% for error in form.email.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+            </div>
+          </div>
+
+          <div>
+            <label class="field-label" for="inquiry_type">I want to…</label>
+            {{ form.inquiry_type(class_='field', id='inquiry_type') }}
+          </div>
+
+          <div>
+            <label class="field-label" for="subject">Subject <span class="normal-case tracking-normal text-mist-soft">(optional)</span></label>
+            {{ form.subject(class_='field', id='subject', placeholder='What is this about?') }}
+            {% for error in form.subject.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+          </div>
+
+          <div>
+            <label class="field-label" for="message">Message</label>
+            {{ form.message(class_='field', id='message', rows='6', placeholder='Tell us about your idea, question or collaboration…') }}
+            {% for error in form.message.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+          </div>
+
+          <button type="submit" class="btn-primary w-full sm:w-auto">Send message</button>
+        </form>
+      {% endif %}
+    </div>
+
+    <!-- ----------------------------------------------------------- info -->
+    <aside class="space-y-5">
+      <div class="card card-glow p-7 reveal">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Direct contact</p>
+        {% if s('contact_email') %}
+          <a href="mailto:{{ s('contact_email') }}" class="mt-4 block font-display text-xl text-mist-bright hover:text-accent-soft">{{ s('contact_email') }}</a>
+        {% else %}
+          <p class="mt-4 text-sm text-mist">The official e-mail address is not published yet — please use the form or LinkedIn.</p>
+        {% endif %}
+        <p class="mt-4 text-xs leading-relaxed text-mist-soft">{{ s('contact_page_intro') }}</p>
+      </div>
+
+      <div class="card card-glow p-7 reveal">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Collaboration inquiries</p>
+        <p class="mt-4 text-sm leading-relaxed text-mist">
+          Research partnerships, competitions, mentorship and institutional collaboration are all welcome.
+          Pick <strong class="text-mist-bright">“Propose a collaboration”</strong> in the form and describe what you have in mind.
+        </p>
+      </div>
+
+      <div class="card card-glow p-7 reveal">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Official channels</p>
+        <ul class="mt-4 space-y-3 text-sm">
+          {% if s('linkedin_url') %}
+          <li>
+            <a class="flex items-center justify-between gap-3 text-mist hover:text-mist-bright" href="{{ s('linkedin_url') }}" target="_blank" rel="noopener noreferrer">
+              <span>LinkedIn</span><span class="font-mono text-xs text-accent-soft">↗</span>
+            </a>
+          </li>
+          {% endif %}
+          {% if s('github_url') %}
+          <li>
+            <a class="flex items-center justify-between gap-3 text-mist hover:text-mist-bright" href="{{ s('github_url') }}" target="_blank" rel="noopener noreferrer">
+              <span>GitHub</span><span class="font-mono text-xs text-accent-soft">↗</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div class="card p-7 reveal">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Organization</p>
+        <p class="mt-4 text-sm text-mist">{{ s('org_full_name') }}</p>
+        <p class="mt-2 text-xs text-mist-soft">Established {{ s('founded_on') }} in {{ s('founded_place') }}.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Messages{% endblock %}
+{% block heading %}Contact messages{% endblock %}
+{% block subheading %}Submitted through the public contact form{% endblock %}
+
+{% block content %}
+<div class="card overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-white/10 bg-white/[0.03] text-left font-mono text-[10px] uppercase tracking-[0.18em] text-mist-soft">
+          <th class="px-5 py-3 font-medium">From</th>
+          <th class="px-5 py-3 font-medium">Subject</th>
+          <th class="px-5 py-3 font-medium">Type</th>
+          <th class="px-5 py-3 font-medium">Received</th>
+          <th class="px-5 py-3 text-right font-medium">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr class="border-b border-white/[0.06] transition last:border-0 hover:bg-white/[0.02]">
+          <td class="px-5 py-4">
+            <div class="flex items-center gap-3">
+              {% if not item.is_read %}<span class="h-1.5 w-1.5 flex-none rounded-full bg-accent"></span>{% endif %}
+              <div class="min-w-0">
+                <p class="truncate font-medium {{ 'text-mist-bright' if not item.is_read else 'text-mist' }}">{{ item.name }}</p>
+                <p class="truncate text-xs text-mist-soft">{{ item.email }}</p>
+              </div>
+            </div>
+          </td>
+          <td class="px-5 py-4 text-mist">{{ item.subject }}</td>
+          <td class="px-5 py-4"><span class="badge">{{ item.inquiry_type }}</span></td>
+          <td class="px-5 py-4 text-xs text-mist-soft">{{ item.created_at|datefmt('%b %d, %Y %H:%M') }}</td>
+          <td class="px-5 py-4">
+            <div class="flex items-center justify-end gap-2">
+              <a href="{{ url_for('admin.message_detail', item_id=item.id) }}" class="icon-btn">Open</a>
+              <form method="post" action="{{ url_for('admin.message_delete', item_id=item.id) }}"
+                    onsubmit="return confirm('Delete this message?');">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="icon-btn hover:border-red-400/40 hover:text-red-300">Del</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="px-5 py-14 text-center text-mist-soft">No messages yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

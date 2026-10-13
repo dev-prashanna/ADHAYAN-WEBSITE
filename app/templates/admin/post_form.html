@@ -1,0 +1,119 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ 'Edit' if obj else 'New' }} blog post{% endblock %}
+{% block heading %}{{ 'Edit' if obj else 'New' }} blog post{% endblock %}
+{% block subheading %}Markdown editor with live preview{% endblock %}
+
+{% block head_extra %}
+<style>
+  #md-preview:empty::before { content: "Nothing to preview yet."; color: #6f7f9e; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between gap-4">
+  <a href="{{ url_for('admin.posts_list') }}" class="btn-ghost !py-2 !text-xs">← Back to posts</a>
+  {% if obj %}
+    <a href="{{ url_for('public.blog_detail', slug=obj.slug) }}" class="btn-ghost !py-2 !text-xs" target="_blank">View live ↗</a>
+  {% endif %}
+</div>
+
+<form method="post" enctype="multipart/form-data" class="mt-5 grid gap-6 lg:grid-cols-3">
+  {{ form.hidden_tag() }}
+
+  <div class="space-y-6 lg:col-span-2">
+    <div class="card p-6">
+      <div class="grid gap-5">
+        <div>
+          <label class="field-label" for="title">Title *</label>
+          {{ form.title(class_='field', id='title', placeholder='Post title') }}
+          {% for error in form.title.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="slug">Slug</label>
+            {{ form.slug(class_='field', id='slug', placeholder='auto-generated when left blank') }}
+            {% for error in form.slug.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+          </div>
+          <div>
+            <label class="field-label" for="author">Author</label>
+            {{ form.author(class_='field', id='author', placeholder='ADHAYAN Founding Team') }}
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label" for="excerpt">Excerpt</label>
+          {{ form.excerpt(class_='field', id='excerpt', placeholder='Short summary shown on cards and in search results') }}
+        </div>
+
+        <div>
+          <div class="mb-2 flex items-center justify-between gap-3">
+            <label class="field-label !mb-0" for="md-content">Content (Markdown)</label>
+            <button type="button" id="md-preview-toggle" class="chip">Preview</button>
+          </div>
+          {{ form.content(class_='field font-mono !text-[13px]', id='md-content', rows='20', placeholder='# Heading\n\nSupports **tables**, fenced ``` code ```, lists, images and $$ math $$.') }}
+          <div id="md-preview" class="prose-adhayan hidden mt-3 rounded-xl border border-white/10 bg-ink-850 p-5"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Publish</p>
+      <div class="mt-5 grid gap-5">
+        <div>
+          <label class="field-label" for="status">Status</label>
+          {{ form.status(class_='field', id='status') }}
+          <p class="mt-1.5 text-[11px] text-mist-soft">Save as a draft while writing.</p>
+        </div>
+        <div>
+          <label class="field-label" for="published_at">Publish date</label>
+          {{ form.published_at(class_='field', id='published_at') }}
+        </div>
+        <label class="flex items-center gap-3 text-sm text-mist">
+          {{ form.featured(class_='h-4 w-4 rounded accent-accent') }}
+          <span>Feature on the homepage</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Taxonomy</p>
+      <div class="mt-5 grid gap-5">
+        <div>
+          <label class="field-label" for="category">Category</label>
+          {{ form.category(class_='field', id='category', placeholder='Research') }}
+        </div>
+        <div>
+          <label class="field-label" for="tags">Tags</label>
+          {{ form.tags(class_='field', id='tags', placeholder='ai, research, community') }}
+          <p class="mt-1.5 text-[11px] text-mist-soft">Comma separated.</p>
+        </div>
+        <div>
+          <label class="field-label" for="meta_description">Meta description (SEO)</label>
+          {{ form.meta_description(class_='field', id='meta_description', rows='3') }}
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-6">
+      <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Cover image</p>
+      <div class="mt-4 overflow-hidden rounded-xl border border-white/10 bg-ink-850">
+        {% set image = form.cover_image.data or (obj.cover_image if obj else '') %}
+        <img id="cover-preview" src="{{ image if image and image.startswith('http') else (url_for('public.media', filename=image) if image else '') }}"
+             alt="" class="h-40 w-full object-cover {{ '' if image else 'hidden' }}">
+        {% if not image %}<div class="flex h-40 items-center justify-center text-xs text-mist-soft">No image selected</div>{% endif %}
+      </div>
+      <div class="mt-4">
+        <label class="field-label" for="cover_image_upload">Upload</label>
+        {{ form.cover_image_upload(class_='field !px-3 !py-2 text-xs', id='cover_image_upload', accept='image/*', data_preview='#cover-preview') }}
+        {% for error in form.cover_image_upload.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+      </div>
+    </div>
+
+    <button type="submit" class="btn-primary w-full">{{ form.submit.label.text }}</button>
+  </div>
+</form>
+{% endblock %}

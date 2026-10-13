@@ -1,0 +1,42 @@
+# Render blueprint for the ADHAYAN website.
+#
+# IMPORTANT: this configuration uses a Render persistent disk. Persistent
+# disks are only available on paid Render instances (Starter and above) —
+# the free tier has ephemeral storage and the SQLite database plus uploaded
+# images would be wiped on every deploy/restart. See docs/DEPLOYMENT.md.
+
+services:
+  - type: web
+    name: adhayan-website
+    runtime: python
+    plan: starter
+    buildCommand: >
+      pip install -r requirements.txt &&
+      python -m flask --app run db upgrade &&
+      python scripts/init_db.py &&
+      python scripts/import_content.py
+    startCommand: gunicorn run:app --bind 0.0.0.0:$PORT --workers 2 --timeout 60
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DATA_DIR
+        value: /var/data
+      - key: UPLOAD_FOLDER
+        value: /var/data/uploads
+      - key: SITE_URL
+        value: https://adhayan.example.com # replace with your real domain
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SESSION_COOKIE_SECURE
+        value: "true"
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: CONTACT_RECIPIENT
+        sync: false
+    healthCheckPath: /robots.txt
+    disk:
+      name: adhayan-data
+      mountPath: /var/data
+      sizeGB: 1

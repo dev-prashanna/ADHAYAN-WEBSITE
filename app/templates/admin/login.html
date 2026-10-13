@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · ADHAYAN Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="{{ url_for('static', filename='images/adhayan-logo-mark.webp') }}" type="image/webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body class="flex min-h-screen items-center justify-center bg-ink-950 px-5 font-sans text-mist antialiased">
+  <div class="pointer-events-none fixed inset-0 overflow-hidden">
+    <div class="absolute -top-32 left-1/2 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-accent/15 blur-[130px]"></div>
+    <div class="absolute bottom-[-10%] right-[-5%] h-[360px] w-[360px] rounded-full bg-violet/15 blur-[120px]"></div>
+  </div>
+
+  <div class="relative w-full max-w-md">
+    <a href="{{ url_for('public.index') }}" class="mb-8 flex items-center justify-center gap-3">
+      <img src="{{ url_for('static', filename='images/adhayan-logo-mark.webp') }}" alt="" width="38" height="38" class="h-10 w-10 rounded-xl">
+      <span class="font-display text-lg font-semibold tracking-[0.22em] text-mist-bright">ADHAYAN</span>
+    </a>
+
+    <div class="card p-8">
+      <p class="eyebrow">Administrator access</p>
+      <h1 class="mt-5 font-display text-2xl text-mist-bright">Sign in to the dashboard</h1>
+      <p class="mt-2 text-sm text-mist-soft">Only authorised administrators can manage site content.</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="mt-5 space-y-2">
+            {% for category, message in messages %}
+              <div class="rounded-xl border px-4 py-3 text-sm
+                {% if category == 'error' %}border-red-400/30 bg-red-500/10 text-red-100
+                {% else %}border-accent/30 bg-accent/10 text-mist-bright{% endif %}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="post" action="{{ url_for('auth.login', next=request.args.get('next')) }}" class="mt-7 space-y-5">
+        {{ form.hidden_tag() }}
+
+        <div>
+          <label class="field-label" for="username">Username</label>
+          {{ form.username(class_='field', id='username', placeholder='admin', autocomplete='username', autofocus=true) }}
+          {% for error in form.username.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div>
+          <label class="field-label" for="password">Password</label>
+          {{ form.password(class_='field', id='password', type='password', placeholder='••••••••', autocomplete='current-password') }}
+          {% for error in form.password.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+        </div>
+
+        <button type="submit" class="btn-primary w-full">Sign in</button>
+      </form>
+    </div>
+
+    <p class="mt-6 text-center font-mono text-[10px] uppercase tracking-[0.22em] text-mist-soft">
+      Sessions are protected with CSRF tokens and secure cookies
+    </p>
+  </div>
+</body>
+</html>

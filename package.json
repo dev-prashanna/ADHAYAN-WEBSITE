@@ -1,0 +1,13 @@
+{
+  "name": "adhayan-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ADHAYAN — AI-Driven Hub for Advanced Youth and Academic Networking",
+  "scripts": {
+    "build:css": "tailwindcss -i ./tailwind/input.css -o ./app/static/css/main.css --minify && cat ./tailwind/pygments.css >> ./app/static/css/main.css",
+    "watch:css": "tailwindcss -i ./tailwind/input.css -o ./app/static/css/main.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

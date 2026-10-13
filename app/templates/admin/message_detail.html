@@ -1,0 +1,47 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Message from {{ item.name }}{% endblock %}
+{% block heading %}{{ item.subject }}{% endblock %}
+{% block subheading %}From {{ item.name }} · {{ item.created_at|datefmt('%B %d, %Y %H:%M') }}{% endblock %}
+
+{% block content %}
+<div class="flex flex-wrap items-center justify-between gap-3">
+  <a href="{{ url_for('admin.messages_list') }}" class="btn-ghost !py-2 !text-xs">← All messages</a>
+  <div class="flex gap-2">
+    <a href="mailto:{{ item.email }}?subject=Re: {{ item.subject }}" class="btn-ghost !py-2 !text-xs">Reply by email</a>
+    <form method="post" action="{{ url_for('admin.message_delete', item_id=item.id) }}"
+          onsubmit="return confirm('Delete this message?');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="btn-danger !py-2 !text-xs">Delete</button>
+    </form>
+  </div>
+</div>
+
+<div class="mt-5 grid gap-6 lg:grid-cols-3">
+  <div class="card p-6 lg:col-span-2">
+    <div class="prose-adhayan">{{ item.message|e|replace('\n', '<br>')|safe }}</div>
+  </div>
+
+  <aside class="card h-fit p-6">
+    <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Details</p>
+    <dl class="mt-5 space-y-4 text-sm">
+      <div class="border-b border-white/[0.07] pb-3">
+        <dt class="text-mist-soft">Name</dt>
+        <dd class="mt-1 text-mist-bright">{{ item.name }}</dd>
+      </div>
+      <div class="border-b border-white/[0.07] pb-3">
+        <dt class="text-mist-soft">Email</dt>
+        <dd class="mt-1 break-all text-mist-bright">{{ item.email }}</dd>
+      </div>
+      <div class="border-b border-white/[0.07] pb-3">
+        <dt class="text-mist-soft">Inquiry type</dt>
+        <dd class="mt-1 text-mist-bright">{{ item.inquiry_type }}</dd>
+      </div>
+      <div>
+        <dt class="text-mist-soft">Received</dt>
+        <dd class="mt-1 text-mist-bright">{{ item.created_at|datefmt('%B %d, %Y %H:%M') }} UTC</dd>
+      </div>
+    </dl>
+  </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section">
+  <div class="shell flex flex-col items-start">
+    <p class="eyebrow">Error 500</p>
+    <h1 class="display-xl mt-6">Something went wrong</h1>
+    <p class="lead mt-6 max-w-xl">An unexpected error occurred on our side. Please try again in a moment.</p>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a class="btn-primary" href="{{ url_for('public.index') }}">Back to the homepage</a>
+      <a class="btn-ghost" href="{{ url_for('public.contact') }}">Report a problem</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

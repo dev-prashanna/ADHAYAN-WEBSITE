@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+{% from "_macros.html" import bg_video as bg_video_layer %}
+
+{% block bg_video %}{{ bg_video_layer('home') }}{% endblock %}
+
+{% block content %}
+<!-- ================================================================ HERO -->
+<section class="relative overflow-hidden pt-16 pb-24 sm:pt-24 sm:pb-32">
+  <div class="pointer-events-none absolute inset-0 grid-bg opacity-70"></div>
+  <div class="shell relative">
+    <div class="grid items-center gap-14 lg:grid-cols-[1fr_auto] lg:gap-10">
+      <div class="max-w-4xl">
+      <p class="eyebrow reveal">{{ s('hero_eyebrow') }}</p>
+
+      <h1 class="display-xl mt-7 text-balance reveal">
+        {{ s('hero_title') }}
+      </h1>
+
+      <p class="lead mt-7 max-w-2xl reveal">{{ s('hero_body') }}</p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-3 reveal">
+        <a class="btn-primary" href="{{ s('hero_primary_url') or '/projects' }}">
+          {{ s('hero_primary_label') }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn-ghost" href="{{ s('hero_secondary_url') or '/about' }}">{{ s('hero_secondary_label') }}</a>
+      </div>
+
+      <dl class="mt-14 grid max-w-2xl grid-cols-3 gap-4 border-t border-white/[0.07] pt-8 reveal">
+        <div>
+          <dt class="font-mono text-[11px] uppercase tracking-[0.2em] text-mist-soft">Cofounders</dt>
+          <dd class="mt-1 font-display text-3xl text-mist-bright">{{ cofounder_count }}</dd>
+        </div>
+        <div>
+          <dt class="font-mono text-[11px] uppercase tracking-[0.2em] text-mist-soft">Countries</dt>
+          <dd class="mt-1 font-display text-3xl text-mist-bright">{{ country_count }}</dd>
+        </div>
+        <div>
+          <dt class="font-mono text-[11px] uppercase tracking-[0.2em] text-mist-soft">Established</dt>
+          <dd class="mt-1 font-display text-3xl text-mist-bright">2026</dd>
+        </div>
+      </dl>
+      </div>
+
+      <div class="flex justify-center lg:justify-end reveal">
+        <div class="hero-logo" aria-hidden="true">
+          <span class="hero-logo-glow"></span>
+          <span class="hero-logo-ring"></span>
+          <span class="hero-logo-ring hero-logo-ring-2"></span>
+          <img src="{{ url_for('static', filename='images/adhayan-logo.png') }}"
+               alt="" width="340" height="340" fetchpriority="high"
+               class="hero-logo-img">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================== INTRO -->
+<section class="section border-t border-white/[0.06]">
+  <div class="shell grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+    <div class="reveal">
+      <p class="eyebrow">{{ s('org_name') }} / introduction</p>
+      <h2 class="display-lg mt-6 text-balance">{{ s('intro_heading') }}</h2>
+      <div class="divider mt-8"></div>
+      <div class="mt-8 space-y-5 text-[17px] leading-relaxed text-mist">
+        {% for para in s('intro_body')|paragraphs %}
+          <p>{{ para }}</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="grid gap-5 sm:grid-cols-2">
+      <article class="card card-glow card-hover p-7 reveal">
+        <span class="badge">Mission</span>
+        <h3 class="mt-5 font-display text-2xl">{{ s('mission_title') }}</h3>
+        <p class="mt-3 text-sm leading-relaxed text-mist">{{ s('mission_body') }}</p>
+      </article>
+      <article class="card card-glow card-hover p-7 reveal">
+        <span class="badge">Vision</span>
+        <h3 class="mt-5 font-display text-2xl">{{ s('vision_title') }}</h3>
+        <p class="mt-3 text-sm leading-relaxed text-mist">{{ s('vision_body') }}</p>
+      </article>
+      <article class="card card-glow card-hover p-7 sm:col-span-2 reveal">
+        <span class="badge">{{ s('values_eyebrow') }}</span>
+        <h3 class="mt-5 font-display text-2xl">{{ s('values_title') }}</h3>
+        <ul class="mt-5 grid gap-4 sm:grid-cols-2">
+          {% for i in range(1, 5) %}
+          <li class="flex gap-3">
+            <span class="mt-1.5 h-1.5 w-1.5 flex-none rounded-full bg-gradient-to-r from-accent to-violet"></span>
+            <span>
+              <span class="block text-sm font-medium text-mist-bright">{{ s('value_%d_title' % i) }}</span>
+              <span class="mt-1 block text-[13px] leading-relaxed text-mist-soft">{{ s('value_%d_body' % i) }}</span>
+            </span>
+          </li>
+          {% endfor %}
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== PROJECTS -->
+<section class="section border-t border-white/[0.06]">
+  <div class="shell">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div class="reveal">
+        <p class="eyebrow">{{ s('home_projects_eyebrow') }}</p>
+        <h2 class="display-lg mt-5">{{ s('home_projects_title') }}</h2>
+      </div>
+      <a href="{{ url_for('public.projects') }}" class="btn-ghost reveal">View all projects</a>
+    </div>
+
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      {% for project in projects %}
+      <a href="{{ url_for('public.project_detail', slug=project.slug) }}"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          {% if project.cover_image %}
+            <img src="{{ project.cover_image if project.cover_image.startswith(('http', '/static/')) else url_for('public.media', filename=project.cover_image) }}"
+                 alt="{{ project.title }}" loading="lazy" decoding="async"
+                 class="h-full w-full {{ 'object-contain' if project.cover_image.startswith(('images/projects/', '/static/images/projects/')) else 'object-cover' }} transition duration-500 group-hover:scale-105">
+          {% else %}
+            <div class="flex h-full w-full items-center justify-center">
+              <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">{{ project.category }}</span>
+            </div>
+          {% endif %}
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">{{ project.category }}</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h3 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">{{ project.title }}</h3>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">{{ project.summary|truncate(150) }}</p>
+          {% if project.tech_list %}
+          <div class="mt-5 flex flex-wrap gap-2">
+            {% for tech in project.tech_list[:3] %}<span class="chip">{{ tech }}</span>{% endfor %}
+          </div>
+          {% endif %}
+          <span class="mt-6 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">
+            Read more
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+      {% else %}
+      <p class="text-mist-soft">Projects will be published here soon.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- =============================================================== BLOG -->
+<section class="section border-t border-white/[0.06]">
+  <div class="shell">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div class="reveal">
+        <p class="eyebrow">{{ s('home_blog_eyebrow') }}</p>
+        <h2 class="display-lg mt-5">{{ s('home_blog_title') }}</h2>
+      </div>
+      <a href="{{ url_for('public.blog') }}" class="btn-ghost reveal">All articles</a>
+    </div>
+
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      {% for post in posts %}
+      <a href="{{ url_for('public.blog_detail', slug=post.slug) }}"
+         class="card card-glow card-hover group flex flex-col p-7 reveal">
+        <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">
+          <span class="text-accent-soft">{{ post.category }}</span>
+          <span class="h-px flex-1 bg-white/10"></span>
+          <time datetime="{{ post.published_at.strftime('%Y-%m-%d') }}">{{ post.published_at|datefmt('%b %d, %Y') }}</time>
+        </div>
+        <h3 class="mt-5 font-display text-xl leading-snug transition group-hover:text-accent-soft">{{ post.title }}</h3>
+        <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">{{ post.excerpt|truncate(160) }}</p>
+        <div class="mt-6 flex items-center justify-between text-xs text-mist-soft">
+          <span>{{ post.author or s('org_name') }}</span>
+          <span class="font-mono uppercase tracking-[0.18em] text-accent-soft">Read</span>
+        </div>
+      </a>
+      {% else %}
+      <p class="text-mist-soft">Articles will be published here soon.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- =============================================================== TEAM -->
+<section class="section border-t border-white/[0.06]">
+  <div class="shell">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div class="reveal">
+        <p class="eyebrow">{{ s('home_team_eyebrow') }}</p>
+        <h2 class="display-lg mt-5">{{ s('home_team_title') }}</h2>
+      </div>
+      <a href="{{ url_for('public.team') }}" class="btn-ghost reveal">Meet everyone</a>
+    </div>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {% for member in cofounders[:4] %}
+      <article class="card card-glow card-hover group overflow-hidden reveal">
+        <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          {% if member.portrait %}
+            <img src="{{ member.portrait if member.portrait.startswith('http') else url_for('static', filename=member.portrait) }}"
+                 alt="{{ member.name }}" loading="lazy" decoding="async"
+                 class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+          {% endif %}
+          <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink-950 via-ink-950/70 to-transparent"></div>
+          <div class="absolute inset-x-0 bottom-0 p-5">
+            <p class="font-display text-base leading-tight text-mist-bright">{{ member.name }}</p>
+            <p class="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-accent-soft">{{ member.role }}</p>
+          </div>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-xs text-mist-soft">{{ member.country }}</p>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- =============================================================== NEWS -->
+<section class="section border-t border-white/[0.06]">
+  <div class="shell grid gap-12 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+    <div class="reveal">
+      <p class="eyebrow">{{ s('home_news_eyebrow') }}</p>
+      <h2 class="display-lg mt-5">{{ s('home_news_title') }}</h2>
+      <p class="lead mt-6 max-w-md">{{ s('news_page_intro') }}</p>
+      <a href="{{ url_for('public.news') }}" class="btn-ghost mt-8">All announcements</a>
+    </div>
+
+    <div class="space-y-4">
+      {% for item in announcements %}
+      <a href="{{ url_for('public.news_detail', slug=item.slug) }}"
+         class="card card-glow card-hover group flex flex-col gap-3 p-6 reveal sm:flex-row sm:items-center sm:gap-6">
+        <div class="sm:w-40 sm:flex-none">
+          <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">{{ item.category }}</p>
+          <p class="mt-1 text-xs text-mist-soft">{{ item.published_at|datefmt('%b %d, %Y') }}</p>
+        </div>
+        <div class="flex-1">
+          <h3 class="font-display text-lg leading-snug transition group-hover:text-accent-soft">{{ item.title }}</h3>
+          <p class="mt-2 text-sm text-mist">{{ item.summary|truncate(140) }}</p>
+        </div>
+        <svg class="hidden h-5 w-5 flex-none text-mist-soft transition group-hover:translate-x-1 group-hover:text-accent sm:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      {% else %}
+      <p class="text-mist-soft">Updates from {{ s('org_name') }} will appear here.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= EVENTS -->
+<section class="section border-t border-white/[0.06]">
+  <div class="shell">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div class="reveal">
+        <p class="eyebrow">{{ s('home_events_eyebrow') }}</p>
+        <h2 class="display-lg mt-5">{{ s('home_events_title') }}</h2>
+      </div>
+      <a href="{{ url_for('public.events') }}" class="btn-ghost reveal">All events</a>
+    </div>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-3">
+      {% for item in upcoming %}
+      <a href="{{ url_for('public.events') }}" class="card card-glow card-hover p-7 reveal">
+        <div class="flex items-center justify-between">
+          <span class="badge badge-live">Upcoming</span>
+          <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">{{ item.type_label }}</span>
+        </div>
+        <h3 class="mt-5 font-display text-xl leading-snug">{{ item.title }}</h3>
+        <p class="mt-3 text-sm leading-relaxed text-mist">{{ item.summary|truncate(130) }}</p>
+        <div class="mt-6 flex items-center gap-3 text-xs text-mist-soft">
+          {% if item.starts_at %}<time datetime="{{ item.starts_at.isoformat() }}">{{ item.starts_at|datefmt('%b %d, %Y') }}</time>{% endif %}
+          <span class="h-1 w-1 rounded-full bg-white/20"></span>
+          <span>{{ item.mode|replace('_', ' ')|title }}</span>
+        </div>
+      </a>
+      {% else %}
+      <p class="text-mist-soft">No upcoming events yet — check back soon.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ CTA -->
+<section class="section">
+  <div class="shell">
+    <div class="card relative overflow-hidden p-10 sm:p-16 reveal">
+      <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-accent/25 blur-[110px]"></div>
+      <div class="pointer-events-none absolute -bottom-28 -left-20 h-72 w-72 rounded-full bg-violet/25 blur-[110px]"></div>
+      <div class="relative max-w-2xl">
+        <p class="eyebrow">{{ s('join_eyebrow') }}</p>
+        <h2 class="display-lg mt-6 text-balance">{{ s('join_title') }}</h2>
+        <p class="lead mt-6">{{ s('join_body') }}</p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          {% if s('linkedin_url') %}
+            <a class="btn-primary" href="{{ s('linkedin_url') }}" target="_blank" rel="noopener noreferrer">{{ s('join_cta_label') }} ↗</a>
+          {% endif %}
+          <a class="btn-ghost" href="{{ url_for('public.contact') }}">Contact the team</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
