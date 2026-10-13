@@ -1,0 +1,67 @@
+PROPRIETARY SOURCE-AVAILABLE LICENSE — ADHAYAN WEBSITE
+========================================================
+
+Copyright (c) 2026 Prashanna Tiwari (dev-prashanna). All rights reserved.
+
+This repository contains the source code for the ADHAYAN website and its
+content-management system ("the Software").
+
+1. DEFINITIONS
+   "ADHAYAN" refers to the organization, its name, acronym, wordmark, logos
+   (including adhayan-logo.png, adhayan-logo.webp, adhayan-logo-mark.webp),
+   visual identity, taglines, and associated branding.
+   "The Software" refers to all source code, templates, styles, scripts,
+   documentation, and assets in this repository.
+
+2. GRANT OF LICENSE
+   You are granted a limited, non-exclusive, non-transferable, revocable
+   license to:
+   a. View and read the source code for personal, non-commercial purposes.
+   b. Fork this repository for private study, learning, or contribution
+      back to this repository via pull request.
+   c. Run a local copy of the Software for personal, non-commercial
+      evaluation.
+
+3. RESTRICTIONS
+   You may NOT, without prior written permission from the copyright holder:
+   a. Use the name "ADHAYAN", its acronym, logos, or any confusingly
+      similar name or branding for any project, product, service,
+      organization, website, or social-media account.
+   b. Deploy the Software, or a derivative of it, as a public website or
+      service that impersonates or appears to be the official ADHAYAN
+      presence.
+   c. Redistribute, sell, sublicense, or relicense the Software or any
+      modified version of it.
+   d. Remove, alter, or obscure any copyright, trademark, or branding
+      notices in the Software or its assets.
+   e. Use the ADHAYAN branding in a way that suggests endorsement,
+      sponsorship, or affiliation by the ADHAYAN organization.
+
+4. TRADEMARK NOTICE
+   "ADHAYAN" and the associated logos are trademarks of the ADHAYAN
+   organization. This license does not grant any trademark rights. Any
+   unauthorized use of the ADHAYAN name or branding constitutes trademark
+   infringement.
+
+5. CONTRIBUTIONS
+   By submitting a pull request, you grant the copyright holder a
+   perpetual, irrevocable, worldwide, royalty-free license to use,
+   modify, and redistribute your contribution as part of the Software.
+
+6. TERMINATION
+   This license terminates automatically if you breach any of its terms.
+   Upon termination, you must cease all use of the Software and the
+   ADHAYAN branding, and destroy all copies in your possession.
+
+7. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+   NONINFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR
+   ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM USE OF THE
+   SOFTWARE.
+
+8. GOVERNING LAW
+   This license shall be governed by the laws of Nepal.
+
+For permission requests, contact: developerprashanna@gmail.com

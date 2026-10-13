@@ -160,7 +160,16 @@ adhayan/
 | [`docs/TESTING.md`](docs/TESTING.md) | Running and writing tests |
 | [`docs/OPERATIONS.md`](docs/OPERATIONS.md) | Backups, upgrades, maintenance |
 
-## Licence & content provenance
+## License & content provenance
+
+This repository is released under a **proprietary source-available license**
+(see [`LICENSE`](LICENSE)). All rights reserved.
+
+**The "ADHAYAN" name, acronym, logos, and branding are protected.** You may
+view and study this code, but you may **not** use the ADHAYAN name or branding
+for your own project, website, or organization, and you may not deploy this
+software as a public site that impersonates the official ADHAYAN presence.
+Unauthorised use of the name or logos constitutes trademark infringement.
 
 Organisational copy, founder biographies, project descriptions and
 announcements originate from the ADHAYAN team's own materials in the
