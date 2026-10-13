@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects &amp; Initiatives · ADHAYAN</title>
+  <meta name="description" content="Projects and initiatives from the ADHAYAN community.">
+  <link rel="canonical" href="http://localhost:5000/projects">
+
+  <meta name="theme-color" content="#04060d">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ADHAYAN">
+  <meta property="og:title" content="Projects &amp; Initiatives">
+  <meta property="og:description" content="Projects and initiatives from the ADHAYAN community.">
+  <meta property="og:url" content="http://localhost:5000/projects">
+  <meta property="og:image" content="http://localhost:5000/static/images/adhayan-logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Projects &amp; Initiatives">
+  <meta name="twitter:description" content="Projects and initiatives from the ADHAYAN community.">
+  <meta name="twitter:image" content="http://localhost:5000/static/images/adhayan-logo.png">
+
+  <link rel="icon" href="/ADHAYAN-WEBSITE/static/images/adhayan-logo-mark.webp" type="image/webp">
+  <link rel="apple-touch-icon" href="/ADHAYAN-WEBSITE/static/images/adhayan-logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="preload" as="style" href="/ADHAYAN-WEBSITE/static/css/main.css">
+  <link rel="stylesheet" href="/ADHAYAN-WEBSITE/static/css/main.css">
+  
+</head>
+<body class="min-h-screen overflow-x-hidden bg-ink-950">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-white">Skip to content</a>
+
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-accent/12 blur-[140px]"></div>
+    <div class="absolute right-[-10%] top-1/3 h-[420px] w-[420px] rounded-full bg-violet/12 blur-[130px]"></div>
+    <div class="absolute bottom-0 left-[-8%] h-[380px] w-[380px] rounded-full bg-cyan/8 blur-[120px]"></div>
+  </div>
+
+  <div class="bg-video-wrap" aria-hidden="true">
+  <video class="bg-video" autoplay muted loop playsinline disablepictureinpicture
+         preload="metadata" tabindex="-1"
+         poster="/ADHAYAN-WEBSITE/static/videos/projects.jpg">
+    <source src="/ADHAYAN-WEBSITE/static/videos/projects.mp4" type="video/mp4">
+  </video>
+  <div class="bg-video-overlay"></div>
+</div>
+
+  <header id="site-header" class="sticky top-0 z-40 border-b border-white/[0.06] bg-ink-950/75 backdrop-blur-xl">
+    <div class="shell flex h-16 items-center justify-between gap-4 sm:h-[72px]">
+      <a href="/ADHAYAN-WEBSITE/" class="group flex items-center gap-3">
+        <img src="/ADHAYAN-WEBSITE/static/images/adhayan-logo-mark.webp"
+             alt="ADHAYAN logo"
+             width="34" height="34" class="h-8 w-8 rounded-lg object-contain transition group-hover:scale-105" fetchpriority="high">
+        <span class="flex flex-col leading-none">
+          <span class="font-display text-[15px] font-semibold tracking-[0.18em] text-mist-bright">ADHAYAN</span>
+          <span class="mt-0.5 hidden font-mono text-[9px] uppercase tracking-[0.22em] text-mist-soft sm:block">Learn. Connect. Create.</span>
+        </span>
+      </a>
+
+      <nav aria-label="Main" class="hidden items-center gap-1 lg:flex">
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/about" >About</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/projects" aria-current="page">Projects</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/blog" >Research</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/team" >Team</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/news" >News</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/events" >Events</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="/ADHAYAN-WEBSITE/contact" class="btn-ghost hidden !px-5 !py-2.5 sm:inline-flex">Get in touch</a>
+        <button id="nav-toggle" type="button" class="icon-btn lg:hidden" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-nav" class="hidden border-t border-white/[0.06] bg-ink-900/95 backdrop-blur-xl lg:hidden">
+      <nav aria-label="Mobile" class="shell grid gap-1 py-4">
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/about">About</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/projects">Projects</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/blog">Research</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/team">Team</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/news">News</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/events">Events</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/contact">Contact</a>
+        <a class="btn-primary mt-2" href="/ADHAYAN-WEBSITE/contact">Join our initiative</a>
+      </nav>
+    </div>
+  </header>
+
+  
+    
+  
+
+  <main id="main" class="relative">
+    
+<section class="relative overflow-hidden border-b border-white/[0.06] pt-16 pb-14 sm:pt-24 sm:pb-20">
+  <div class="pointer-events-none absolute inset-0 grid-bg opacity-60"></div>
+  <div class="shell relative">
+    <p class="eyebrow">ADHAYAN / WORK</p>
+    <h1 class="display-lg mt-6 max-w-3xl text-balance">Projects &amp; Initiatives</h1>
+    
+      <p class="lead mt-6 max-w-2xl">Selected work and open initiatives from the ADHAYAN community.</p>
+    
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="card p-5 reveal sm:p-6">
+      <form method="get" action="/ADHAYAN-WEBSITE/projects" class="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <div class="relative flex-1">
+          <svg class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-mist-soft" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <label for="q" class="sr-only">Search projects</label>
+          <input id="q" name="q" type="search" value="" placeholder="Search projects, tech stack, keywords…"
+                 class="field !pl-11">
+        </div>
+        
+        <button type="submit" class="btn-primary">Search</button>
+        
+      </form>
+
+      
+      <div class="mt-5 flex flex-wrap gap-2 border-t border-white/[0.07] pt-5">
+        <a href="/ADHAYAN-WEBSITE/projects" class="chip chip-active">All</a>
+        
+          <a href="/ADHAYAN-WEBSITE/projects?category=AI+%26+ML"
+             class="chip ">AI &amp; ML</a>
+        
+          <a href="/ADHAYAN-WEBSITE/projects?category=AI+Security"
+             class="chip ">AI Security</a>
+        
+          <a href="/ADHAYAN-WEBSITE/projects?category=Competition"
+             class="chip ">Competition</a>
+        
+          <a href="/ADHAYAN-WEBSITE/projects?category=Computer+Vision"
+             class="chip ">Computer Vision</a>
+        
+          <a href="/ADHAYAN-WEBSITE/projects?category=Cybersecurity"
+             class="chip ">Cybersecurity</a>
+        
+          <a href="/ADHAYAN-WEBSITE/projects?category=Data+Science"
+             class="chip ">Data Science</a>
+        
+          <a href="/ADHAYAN-WEBSITE/projects?category=Robotics"
+             class="chip ">Robotics</a>
+        
+          <a href="/ADHAYAN-WEBSITE/projects?category=Software"
+             class="chip ">Software</a>
+        
+          <a href="/ADHAYAN-WEBSITE/projects?category=Testing"
+             class="chip ">Testing</a>
+        
+      </div>
+      
+    </div>
+
+    <p class="mt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-mist-soft reveal">
+      13 projects
+      
+      
+    </p>
+
+    <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      
+      <a href="/ADHAYAN-WEBSITE/projects/spatial-perception"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <img src="/ADHAYAN-WEBSITE/media/images/projects/spatial-perception.png"
+                 alt="Spatial_Preception" loading="lazy" decoding="async"
+                 class="h-full w-full object-contain transition duration-500 group-hover:scale-105">
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">Robotics</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">Spatial_Preception</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">Research comparing imitation learning and deep reinforcement learning for autonomous robot navigation and obstacle avoidance.</p>
+          
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="chip">Python</span><span class="chip">PyTorch</span><span class="chip">NumPy</span><span class="chip">Reinforcement Learning</span>
+          </div>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Prashanna Tiwari</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/image-segmentation-naterida"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <img src="/ADHAYAN-WEBSITE/media/images/projects/image-segmentation-naterida.png"
+                 alt="Image-Segmentation-Naterida" loading="lazy" decoding="async"
+                 class="h-full w-full object-contain transition duration-500 group-hover:scale-105">
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">Computer Vision</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">Image-Segmentation-Naterida</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">U-Net terrain segmentation for agricultural robots, with automated training labels generated by GroundingDINO and SAM.</p>
+          
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="chip">Python</span><span class="chip">U-Net</span><span class="chip">GroundingDINO</span><span class="chip">SAM</span>
+          </div>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Prasiddha Mainali, Prashanna Tiwari, Prince Kumar Mandal</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/naterida"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <img src="/ADHAYAN-WEBSITE/media/images/projects/naterida.png"
+                 alt="NATERIDA" loading="lazy" decoding="async"
+                 class="h-full w-full object-contain transition duration-500 group-hover:scale-105">
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">Robotics</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">NATERIDA</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">A modular exploration architecture combining cognition, spatial awareness, and data analytics for autonomous reasoning.</p>
+          
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="chip">Machine Learning</span><span class="chip">Computer Vision</span><span class="chip">Data Analytics</span>
+          </div>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Prasiddha Mainali, Prashanna Tiwari, Prince Kumar Mandal</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/cyphex"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <img src="/ADHAYAN-WEBSITE/media/images/projects/cyphex.png"
+                 alt="CYPHEX" loading="lazy" decoding="async"
+                 class="h-full w-full object-contain transition duration-500 group-hover:scale-105">
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">Cybersecurity</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">CYPHEX</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">Headless ESP32 firmware for WiFi and Bluetooth security testing, controlled through Serial, BLE, or WiFi.</p>
+          
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="chip">C++</span><span class="chip">ESP32</span><span class="chip">PlatformIO</span><span class="chip">WiFi</span>
+          </div>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Prashanna Tiwari</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/guardrailer"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <img src="/ADHAYAN-WEBSITE/media/images/projects/guardrailer.png"
+                 alt="Guardrailer" loading="lazy" decoding="async"
+                 class="h-full w-full object-contain transition duration-500 group-hover:scale-105">
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">AI Security</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">Guardrailer</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">Prompt injection detection research combining hybrid vector search, multiple scoring signals, and contextual LLM evaluation.</p>
+          
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="chip">Python</span><span class="chip">RAG</span><span class="chip">Qdrant</span><span class="chip">Embeddings</span>
+          </div>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Prashanna Tiwari</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/project-jerry"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <img src="/ADHAYAN-WEBSITE/media/images/projects/project-jerry.png"
+                 alt="PROJECT-JERRY" loading="lazy" decoding="async"
+                 class="h-full w-full object-contain transition duration-500 group-hover:scale-105">
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">Robotics</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">PROJECT-JERRY</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">An experimental pet robot pairing ESP32 hardware with local speech, vision, depth perception, and dialogue software.</p>
+          
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="chip">Python</span><span class="chip">ESP32</span><span class="chip">Whisper</span><span class="chip">Moondream-2</span>
+          </div>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Prashanna Tiwari</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/transformer-from-scratch"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <div class="flex h-full w-full items-center justify-center">
+              <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">AI &amp; ML</span>
+            </div>
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">AI &amp; ML</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">Transformer from scratch</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">A from-scratch implementation of the Transformer architecture.</p>
+          
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="chip">Python</span><span class="chip">Deep Learning</span>
+          </div>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Pitambar Lamichhane</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/adhayan-weekly-competition-2"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <div class="flex h-full w-full items-center justify-center">
+              <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">Competition</span>
+            </div>
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">Competition</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">ADHAYAN Weekly Competition 2 — Teach Dmytro to read</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">Weekly competition #2, hosted on Kaggle and created by Andrii Bilan.</p>
+          
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="chip">Kaggle</span><span class="chip">Machine Learning</span>
+          </div>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Andrii Bilan</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/test-project-alpha"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <div class="flex h-full w-full items-center justify-center">
+              <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">Testing</span>
+            </div>
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">Testing</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">Test Project Alpha v2</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">A test summary</p>
+          
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="chip">Python</span><span class="chip">Flask</span>
+          </div>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Tester</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/flood-victim-tracking-app"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <div class="flex h-full w-full items-center justify-center">
+              <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">Software</span>
+            </div>
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">Software</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">Flood victim tracking app</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">An independently built application for tracking flood victims.</p>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Peter R. Kandel</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/fifa-data-exploration"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <div class="flex h-full w-full items-center justify-center">
+              <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">Data Science</span>
+            </div>
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">Data Science</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">FIFA Data Exploration &amp; Insights Generation</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">An AI/data project exploring FIFA data and generating insights.</p>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Huzaifa Gulzar Shaikh</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/yolov11-posture-recognition"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <div class="flex h-full w-full items-center justify-center">
+              <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">Computer Vision</span>
+            </div>
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">Computer Vision</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">Real-time posture recognition with YOLOv11</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">A YOLOv11-based real-time posture recognition system.</p>
+          
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="chip">YOLOv11</span><span class="chip">Computer Vision</span>
+          </div>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Huzaifa Gulzar Shaikh</p>
+          
+        </div>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/projects/healstream-c-effect-aeolian-nexus"
+         class="card card-glow card-hover group flex flex-col overflow-hidden reveal">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-ink-700 to-ink-900">
+          
+            <div class="flex h-full w-full items-center justify-center">
+              <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">Software</span>
+            </div>
+          
+          <span class="absolute left-3 top-3 badge bg-ink-950/70 backdrop-blur">Software</span>
+        </div>
+        <div class="flex flex-1 flex-col p-6">
+          <h2 class="font-display text-xl leading-snug transition group-hover:text-accent-soft">HealStream, C-Effect &amp; Aeolian Nexus</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-mist">Three projects built by ADHAYAN co-founder Chanitha Sendinu Denagama.</p>
+          
+          
+          <p class="mt-4 text-xs text-mist-soft">By Chanitha Sendinu Denagama</p>
+          
+        </div>
+      </a>
+      
+    </div>
+  </div>
+</section>
+
+  </main>
+
+  <footer class="relative mt-24 border-t border-white/[0.07] bg-ink-900/60">
+    <div class="shell grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div class="max-w-sm">
+        <a href="/ADHAYAN-WEBSITE/" class="flex items-center gap-3">
+          <img src="/ADHAYAN-WEBSITE/static/images/adhayan-logo-mark.webp" alt="" width="34" height="34" class="h-9 w-9 rounded-lg object-contain" loading="lazy">
+          <span class="font-display text-base font-semibold tracking-[0.2em] text-mist-bright">ADHAYAN</span>
+        </a>
+        <p class="mt-4 text-sm leading-relaxed text-mist-soft">ADHAYAN — a youth-driven academic network connecting curious minds across borders through learning, research and collaboration.</p>
+        <p class="mt-4 font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft/70">AI-Driven Hub for Advanced Youth and Academic Networking</p>
+      </div>
+
+      <div>
+        <h2 class="font-mono text-[11px] uppercase tracking-[0.24em] text-accent-soft">Explore</h2>
+        <ul class="mt-4 space-y-2.5 text-sm text-mist">
+          <li><a href="/ADHAYAN-WEBSITE/projects" class="hover:text-mist-bright">Projects</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/blog" class="hover:text-mist-bright">Blogs &amp; Research</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/events" class="hover:text-mist-bright">Events &amp; Competitions</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/news" class="hover:text-mist-bright">News</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-mono text-[11px] uppercase tracking-[0.24em] text-accent-soft">Organization</h2>
+        <ul class="mt-4 space-y-2.5 text-sm text-mist">
+          <li><a href="/ADHAYAN-WEBSITE/about" class="hover:text-mist-bright">About us</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/team" class="hover:text-mist-bright">Cofounders &amp; team</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/contact" class="hover:text-mist-bright">Contact</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/sitemap.xml" class="hover:text-mist-bright">Sitemap</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-mono text-[11px] uppercase tracking-[0.24em] text-accent-soft">Connect</h2>
+        <ul class="mt-4 space-y-2.5 text-sm text-mist">
+          
+            <li><a href="https://www.linkedin.com/company/adhayan/" target="_blank" rel="noopener noreferrer" class="hover:text-mist-bright">LinkedIn ↗</a></li>
+          
+          
+            <li><a href="https://github.com/peterkandel/AURA" target="_blank" rel="noopener noreferrer" class="hover:text-mist-bright">GitHub ↗</a></li>
+          
+          
+        </ul>
+      </div>
+    </div>
+
+    <div class="shell flex flex-col items-start justify-between gap-3 border-t border-white/[0.06] py-6 text-xs text-mist-soft sm:flex-row sm:items-center">
+      <p>© 2026 ADHAYAN. Established in Nepal, September 1, 2026.</p>
+      <p class="font-mono uppercase tracking-[0.2em]">Learn · Connect · Create</p>
+    </div>
+  </footer>
+
+  <script src="/ADHAYAN-WEBSITE/static/js/main.js" defer></script>
+  
+</body>
+</html>
