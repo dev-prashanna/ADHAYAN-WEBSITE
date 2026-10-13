@@ -22,6 +22,9 @@ uploads/
 *.db
 *.sqlite3
 
+# --- static export build output (deployed via gh-pages branch) --------------------
+_site/
+
 # --- editor / OS -----------------------------------------------------------------
 .idea/
 .vscode/
