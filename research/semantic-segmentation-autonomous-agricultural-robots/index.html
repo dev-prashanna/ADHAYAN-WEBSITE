@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Semantic Segmentation for Autonomous Agricultural Robots: A U-Net Approach with Auto-Generated Labels · ADHAYAN</title>
+  <meta name="description" content="A U-Net semantic segmentation manuscript using GroundingDINO and SAM to generate terrain labels for simulated agricultural robots.">
+  <link rel="canonical" href="http://localhost:5000/research/semantic-segmentation-autonomous-agricultural-robots">
+
+  <meta name="theme-color" content="#04060d">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ADHAYAN">
+  <meta property="og:title" content="Semantic Segmentation for Autonomous Agricultural Robots: A U-Net Approach with Auto-Generated Labels">
+  <meta property="og:description" content="A U-Net semantic segmentation manuscript using GroundingDINO and SAM to generate terrain labels for simulated agricultural robots.">
+  <meta property="og:url" content="http://localhost:5000/research/semantic-segmentation-autonomous-agricultural-robots">
+  <meta property="og:image" content="http://localhost:5000/static/images/adhayan-logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Semantic Segmentation for Autonomous Agricultural Robots: A U-Net Approach with Auto-Generated Labels">
+  <meta name="twitter:description" content="A U-Net semantic segmentation manuscript using GroundingDINO and SAM to generate terrain labels for simulated agricultural robots.">
+  <meta name="twitter:image" content="http://localhost:5000/static/images/adhayan-logo.png">
+
+  <link rel="icon" href="/ADHAYAN-WEBSITE/static/images/adhayan-logo-mark.webp" type="image/webp">
+  <link rel="apple-touch-icon" href="/ADHAYAN-WEBSITE/static/images/adhayan-logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="preload" as="style" href="/ADHAYAN-WEBSITE/static/css/main.css">
+  <link rel="stylesheet" href="/ADHAYAN-WEBSITE/static/css/main.css">
+  
+</head>
+<body class="public-site min-h-screen overflow-x-hidden bg-ink-950">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-white">Skip to content</a>
+
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-accent/12 blur-[140px]"></div>
+    <div class="absolute right-[-10%] top-1/3 h-[420px] w-[420px] rounded-full bg-violet/12 blur-[130px]"></div>
+    <div class="absolute bottom-0 left-[-8%] h-[380px] w-[380px] rounded-full bg-cyan/8 blur-[120px]"></div>
+  </div>
+
+  <div class="research-backdrop" aria-hidden="true"></div>
+
+  <header id="site-header" class="sticky top-0 z-40 border-b border-white/[0.06] bg-ink-950/75 backdrop-blur-xl">
+    <div class="shell flex h-20 items-center justify-between gap-4 sm:h-[88px]">
+      <a href="/ADHAYAN-WEBSITE/" class="group flex items-center gap-3">
+        <img src="/ADHAYAN-WEBSITE/static/images/adhayan-logo-mark.webp"
+             alt="ADHAYAN logo"
+             width="34" height="34" class="h-8 w-8 rounded-lg object-contain transition group-hover:scale-105" fetchpriority="high">
+        <span class="flex flex-col leading-none">
+          <span class="font-display text-[15px] font-semibold tracking-[0.18em] text-mist-bright">ADHAYAN</span>
+          <span class="mt-0.5 hidden font-mono text-[9px] uppercase tracking-[0.22em] text-mist-soft sm:block">Learn. Connect. Create.</span>
+        </span>
+      </a>
+
+      <nav aria-label="Main" class="hidden items-center gap-1 lg:flex">
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/about" >About</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/projects" >Projects</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/research" aria-current="page">Research</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/blog" >Blog</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/team" >Team</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/news" >News</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/events" >Events</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        
+          <a href="/ADHAYAN-WEBSITE/auth/google" class="btn-ghost hidden !px-5 !py-2.5 sm:inline-flex">Sign in</a>
+        
+        <a href="/ADHAYAN-WEBSITE/contact" class="btn-ghost hidden !px-5 !py-2.5 sm:inline-flex">Get in touch</a>
+        <button id="nav-toggle" type="button" class="icon-btn lg:hidden" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-nav" class="hidden border-t border-white/[0.06] bg-ink-900/95 backdrop-blur-xl lg:hidden">
+      <nav aria-label="Mobile" class="shell grid gap-1 py-4">
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/about">About</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/projects">Projects</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/research">Research</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/blog">Blog</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/team">Team</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/news">News</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/events">Events</a>
+        <a class="nav-link" href="/ADHAYAN-WEBSITE/contact">Contact</a>
+        
+          <a class="btn-ghost mt-2" href="/ADHAYAN-WEBSITE/auth/google">Sign in with Google</a>
+        
+        <a class="btn-primary mt-2" href="/ADHAYAN-WEBSITE/contact">Join our initiative</a>
+      </nav>
+    </div>
+  </header>
+
+  
+    
+  
+
+  <main id="main" class="relative">
+    
+<div class="research-detail">
+<section class="research-masthead relative overflow-hidden border-b border-white/[0.06] pt-10 pb-12 sm:pt-14">
+  <div class="pointer-events-none absolute inset-0 grid-bg opacity-50"></div>
+  <div class="shell relative">
+    <nav aria-label="Breadcrumb" class="font-mono text-[11px] uppercase tracking-[0.2em] text-mist-soft">
+      <a href="/ADHAYAN-WEBSITE/research" class="hover:text-accent-soft">Research</a>
+      <span class="mx-2">/</span>
+      <span class="text-mist">Preprint</span>
+    </nav>
+
+    <h1 class="display-lg mt-6 max-w-4xl text-balance">Semantic Segmentation for Autonomous Agricultural Robots: A U-Net Approach with Auto-Generated Labels</h1>
+    <p class="mt-4 text-sm text-mist">Independent research · Preprint</p>
+
+    <div class="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-mist-soft">
+      <span class="text-mist-bright">Prashanna Tiwari</span>
+      <span class="h-1 w-1 rounded-full bg-white/20"></span>
+      <time datetime="2026-07-01">July 2026</time>
+      
+      <span class="h-1 w-1 rounded-full bg-white/20"></span>
+      <span>MIT</span>
+      
+    </div>
+  </div>
+</section>
+
+<article class="research-article section">
+  <div class="research-layout shell grid gap-6 lg:grid-cols-[minmax(0,2.6fr)_minmax(0,1fr)]">
+    
+    <div class="research-sheet min-w-0 space-y-12">
+      
+      <section>
+        <h2 class="eyebrow">Abstract</h2>
+        <div class="prose-adhayan mt-5"><p>This paper presents the development of a semantic segmentation pipeline designed for autonomous navigation in agricultural environments. Inspired by the NATERIDA microbots project—an AI-powered exploration robot capable of environmental monitoring and intelligent data collection—we implement a U-Net convolutional neural network trained on automatically generated pixel-level annotations. The system uses GroundingDINO for open-vocabulary object detection and the Segment Anything Model (SAM) for mask generation, eliminating the need for manual annotation. Data is collected through a simulated Pioneer 3-AT robot performing random-walk exploration in a Webots physics simulator. The model segments scenes into five terrain classes: soil, vegetation, obstacles, pedestrians, and sky. After training for 100 epochs on an NVIDIA GeForce RTX 4060 Laptop GPU with Albumentations-based data augmentation, the system achieves a validation Intersection-over-Union (IoU) of 0.4453 and a Dice coefficient of 0.5497. While these results indicate moderate performance, they demonstrate a viable pipeline for low-cost dataset creation and segmentation model training without manual labeling effort.</p></div>
+      </section>
+      
+
+      
+      <section>
+        <h2 class="eyebrow">Files</h2>
+        <div class="card mt-5 overflow-hidden">
+          <div class="flex items-center justify-between gap-4 border-b border-white/[0.07] px-6 py-4">
+            <div class="flex min-w-0 items-center gap-3">
+              <span class="badge badge-live">PDF</span>
+              <span class="truncate text-sm text-mist-bright">naterida-segmentation-paper.pdf</span>
+              <span class="shrink-0 text-xs text-mist-soft">2.3 MB</span>
+            </div>
+            <a href="/ADHAYAN-WEBSITE/media/papers/naterida-segmentation-paper.pdf"
+               class="btn-ghost !py-2 !text-xs" target="_blank" rel="noopener">Download</a>
+          </div>
+          <iframe
+            src="/ADHAYAN-WEBSITE/media/papers/naterida-segmentation-paper.pdf#view=FitH"
+            title="PDF preview of Semantic Segmentation for Autonomous Agricultural Robots: A U-Net Approach with Auto-Generated Labels"
+            class="h-[70vh] w-full border-0 bg-ink-900"
+            loading="lazy"></iframe>
+        </div>
+        <div class="research-file-row mt-3 flex flex-wrap items-center justify-between gap-3 text-sm">
+          <span class="min-w-0 break-all">naterida-segmentation-paper.pdf · 2.3 MB</span>
+          <a href="/ADHAYAN-WEBSITE/media/papers/naterida-segmentation-paper.pdf" target="_blank" rel="noopener" class="font-medium underline underline-offset-4">Open full-screen ↗</a>
+        </div>
+      </section>
+      
+
+      
+      <section>
+        <h2 class="eyebrow">Software</h2>
+        <dl class="card mt-5 divide-y divide-white/[0.06]">
+          
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-1 px-6 py-4">
+            <dt class="w-40 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Repository</dt>
+            <dd class="min-w-0 break-all text-sm">
+              <a href="https://github.com/dev-prashanna/Image-Segmentation-Naterida" class="text-accent-soft hover:underline" target="_blank" rel="noopener noreferrer">https://github.com/dev-prashanna/Image-Segmentation-Naterida</a>
+            </dd>
+          </div>
+          
+          
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-1 px-6 py-4">
+            <dt class="w-40 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Language</dt>
+            <dd class="text-sm text-mist-bright">Python</dd>
+          </div>
+          
+          
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-1 px-6 py-4">
+            <dt class="w-40 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Development status</dt>
+            <dd class="text-sm text-mist-bright">Research prototype</dd>
+          </div>
+          
+        </dl>
+      </section>
+      
+
+      
+      <section>
+        <h2 class="eyebrow">References</h2>
+        <ul class="card mt-5 list-disc space-y-3 px-6 py-5 pl-10 text-sm leading-relaxed text-mist">
+          
+            <li>Prasiddha Mainali, Prashanna Tiwari, and Prince Kumar Mandal, “NATERIDA microbots,” Devpost, Aug. 2025. Available: https://devpost.com/software/naterida-microbots-i4bv8r</li>
+          
+            <li>Olaf Ronneberger, Philipp Fischer, and Thomas Brox, “U-Net: Convolutional networks for biomedical image segmentation,” in Proc. MICCAI, 2015, pp. 234–241.</li>
+          
+            <li>Jonathan Long, Evan Shelhamer, and Trevor Darrell, “Fully convolutional networks for semantic segmentation,” in Proc. CVPR, 2015, pp. 3431–3440.</li>
+          
+            <li>Liang-Chieh Chen, Yukun Zhu, George Papandreou, Florian Schroff, and Hartwig Adam, “Encoder-decoder with atrous separable convolution for semantic image segmentation,” in Proc. ECCV, 2018, pp. 801–818.</li>
+          
+            <li>Enze Xie, Wenhai Wang, Zhiding Yu, Anima Anandkumar, Jose M. Alvarez, and Ping Luo, “SegFormer: Simple and efficient design for semantic segmentation with transformers,” in Proc. NeurIPS, 2021, pp. 12077–12090.</li>
+          
+            <li>Shilong Liu, Zhaoyang Zeng, Tianhe Ren, Feng Li, Hao Zhang, et al., “Grounding DINO: Marrying DINO with grounded pre-training for open-set object detection,” in Proc. ECCV, 2024.</li>
+          
+            <li>Alexander Kirillov, Eric Mintun, Nikhila Ravi, Hanzi Mao, Chloe Rolland, et al., “Segment Anything,” in Proc. ICCV, 2023, pp. 4015–4026.</li>
+          
+            <li>Olivier Michel, “Webots: Professional mobile robot simulation,” International Journal of Advanced Robotic Systems, vol. 1, no. 1, pp. 39–42, 2004.</li>
+          
+        </ul>
+      </section>
+      
+    </div>
+
+    
+    <aside class="research-sidebar space-y-5 lg:self-start" aria-label="Preprint information">
+      <div class="card p-6">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Credits</p>
+        <p class="mt-3 text-sm text-mist-bright">Prashanna Tiwari</p>
+        <p class="mt-1 text-xs text-mist-soft">Independent researcher</p>
+        
+      </div>
+
+      <dl class="card divide-y divide-white/[0.06] text-sm">
+        <div class="px-6 py-4">
+          <dt class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Preprint date</dt>
+          <dd class="mt-1 text-mist-bright">July 2026</dd>
+        </div>
+        <div class="px-6 py-4">
+          <dt class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Resource type</dt>
+          <dd class="mt-1 text-mist-bright">Preprint</dd>
+        </div>
+        <div class="px-6 py-4">
+          <dt class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Research type</dt>
+          <dd class="mt-1 text-mist-bright">Independent research</dd>
+        </div>
+        
+        <div class="px-6 py-4">
+          <dt class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">License</dt>
+          <dd class="mt-1 text-mist-bright">MIT</dd>
+        </div>
+        
+        
+      </dl>
+
+      
+
+      
+      <div class="card p-6">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Keywords</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <span class="chip">semantic segmentation</span><span class="chip">U-Net</span><span class="chip">GroundingDINO</span><span class="chip">Segment Anything</span><span class="chip">agricultural robotics</span><span class="chip">Webots</span>
+        </div>
+      </div>
+      
+
+      <section class="card p-6">
+        <h2 class="eyebrow">Citation</h2>
+        <p class="mt-3 break-words text-sm">Prashanna Tiwari (2026). <em>Semantic Segmentation for Autonomous Agricultural Robots: A U-Net Approach with Auto-Generated Labels</em> [Preprint]. Independent research.</p>
+      </section>
+
+      <a href="/ADHAYAN-WEBSITE/research" class="btn-ghost w-full justify-center">← All research</a>
+    </aside>
+  </div>
+</article>
+
+
+<section class="border-t border-white/[0.06] py-16">
+  <div class="shell">
+    <p class="eyebrow">More research</p>
+    <div class="mt-8 grid gap-6 md:grid-cols-3">
+      
+      <a href="/ADHAYAN-WEBSITE/research/lightweight-prompt-injection-detection" class="card card-glow card-hover group p-6">
+        <time class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft" datetime="2026-08-27">August 27, 2026</time>
+        <h3 class="mt-3 font-display text-lg leading-snug transition group-hover:text-accent-soft">Lightweight Prompt Injection Detection: From Centroid-Based Embedding Classification to a Hybrid Guardrail</h3>
+        <p class="mt-2 text-xs text-mist">Prashanna Tiwari</p>
+      </a>
+      
+      <a href="/ADHAYAN-WEBSITE/research/autonomous-edge-robotics-bc-vs-dqn" class="card card-glow card-hover group p-6">
+        <time class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft" datetime="2026-06-18">June 18, 2026</time>
+        <h3 class="mt-3 font-display text-lg leading-snug transition group-hover:text-accent-soft">Autonomous Edge Robotics: A Comparative Analysis of Behavioral Cloning and Deep Q-Networks in Constrained 2D Environments</h3>
+        <p class="mt-2 text-xs text-mist">Prashanna Tiwari</p>
+      </a>
+      
+    </div>
+  </div>
+</section>
+
+</div>
+
+  </main>
+
+  <footer class="relative mt-24 border-t border-white/[0.07] bg-ink-900/60">
+    <div class="shell grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div class="max-w-sm">
+        <a href="/ADHAYAN-WEBSITE/" class="flex items-center gap-3">
+          <img src="/ADHAYAN-WEBSITE/static/images/adhayan-logo-mark.webp" alt="" width="34" height="34" class="h-9 w-9 rounded-lg object-contain" loading="lazy">
+          <span class="font-display text-base font-semibold tracking-[0.2em] text-mist-bright">ADHAYAN</span>
+        </a>
+        <p class="mt-4 text-sm leading-relaxed text-mist-soft">ADHAYAN — a youth-driven academic network connecting curious minds across borders through learning, research and collaboration.</p>
+        <p class="mt-4 font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft/70">AI-Driven Hub for Advanced Youth and Academic Networking</p>
+      </div>
+
+      <div>
+        <h2 class="font-mono text-[11px] uppercase tracking-[0.24em] text-accent-soft">Explore</h2>
+        <ul class="mt-4 space-y-2.5 text-sm text-mist">
+          <li><a href="/ADHAYAN-WEBSITE/projects" class="hover:text-mist-bright">Projects</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/blog" class="hover:text-mist-bright">Blogs &amp; Research</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/events" class="hover:text-mist-bright">Events &amp; Competitions</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/news" class="hover:text-mist-bright">News</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-mono text-[11px] uppercase tracking-[0.24em] text-accent-soft">Organization</h2>
+        <ul class="mt-4 space-y-2.5 text-sm text-mist">
+          <li><a href="/ADHAYAN-WEBSITE/about" class="hover:text-mist-bright">About us</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/team" class="hover:text-mist-bright">Cofounders &amp; team</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/contact" class="hover:text-mist-bright">Contact</a></li>
+          <li><a href="/ADHAYAN-WEBSITE/sitemap.xml" class="hover:text-mist-bright">Sitemap</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-mono text-[11px] uppercase tracking-[0.24em] text-accent-soft">Connect</h2>
+        <ul class="mt-4 space-y-2.5 text-sm text-mist">
+          
+            <li><a href="https://www.linkedin.com/company/adhayan/" target="_blank" rel="noopener noreferrer" class="hover:text-mist-bright">LinkedIn ↗</a></li>
+          
+          
+            <li><a href="https://github.com/peterkandel/AURA" target="_blank" rel="noopener noreferrer" class="hover:text-mist-bright">GitHub ↗</a></li>
+          
+          
+        </ul>
+      </div>
+    </div>
+
+    <div class="shell flex flex-col items-start justify-between gap-3 border-t border-white/[0.06] py-6 text-xs text-mist-soft sm:flex-row sm:items-center">
+      <p>© 2026 ADHAYAN. Established in Nepal, September 1, 2026. Made by Prashanna Tiwari · October 15, 2026.</p>
+      <p class="font-mono uppercase tracking-[0.2em]">Learn · Connect · Create</p>
+    </div>
+  </footer>
+
+  <script src="/ADHAYAN-WEBSITE/static/js/main.js" defer></script>
+  
+</body>
+</html>
