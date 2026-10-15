@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "autonomous-edge-robotics-bc-vs-dqn",
+    "title": "Autonomous Edge Robotics: A Comparative Analysis of Behavioral Cloning and Deep Q-Networks in Constrained 2D Environments",
+    "abstract": "The development of lightweight, reactive navigation systems for mobile edge robotics is a critical challenge in modern computer science. Traditional pathfinding relies on heavy, map-based computations which are often unsuited for hardware-constrained edge devices. This paper investigates the efficacy of deploying artificial neural networks to map raw sensor data directly to motor commands, bypassing traditional algorithmic pathfinding. We conduct a rigorous comparative study between two distinct machine learning paradigms: Behavioral Cloning (a supervised imitation learning approach) and Deep Q-Networks (a model-free reinforcement learning approach). Notably, to test the specific strengths of each paradigm, the supervised model navigated a continuous space with multiple randomized rectangular obstacles, while the reinforcement learning agent was tasked with finding a narrow pass-through corridor in a discrete-grid framework. Our findings indicate that while Behavioral Cloning is highly efficient at replicating hard-coded heuristic safety rules, the reinforcement learning agent—guided by potential-based reward shaping and DoubleDQN target updates—develops a superior capacity for complex spatial goal-seeking. Furthermore, this paper provides a deep mathematical analysis of observed training failures, specifically addressing the mechanics of reward plateaus and vanishing temporal-difference errors, and proposes concrete architectural improvements for future iterations.",
+    "keywords": "edge robotics, behavioral cloning, deep Q-networks, reinforcement learning, obstacle avoidance, research draft",
+    "pdf_filename": "paper_draft.pdf",
+    "pdf_path": "papers/spatial-perception-paper.pdf",
+    "github_url": "https://github.com/dev-prashanna/Spatial_Preception",
+    "references": "Thrun, S., Burgard, W., & Fox, D. (2005). Probabilistic Robotics. MIT Press.\nPomerleau, D. A. (1989). ALVINN: An autonomous land vehicle in a neural network. Advances in Neural Information Processing Systems, 1.\nMnih, V., Kavukcuoglu, K., Silver, D., et al. (2015). Human-level control through deep reinforcement learning. Nature, 518(7540), 529–533.\nSutton, R. S., & Barto, A. G. (2018). Reinforcement Learning: An Introduction. MIT Press.\nNg, A. Y., Harada, D., & Russell, S. (1999). Policy invariance under reward transformations: Theory and application to reward shaping. ICML, 99, 278–287.\nVan Hasselt, H., Guez, A., & Silver, D. (2016). Deep reinforcement learning with double Q-learning. Proceedings of the AAAI Conference on Artificial Intelligence, 30(1).",
+    "published_at": "2026-06-18",
+    "meta_description": "Research draft comparing behavioral cloning and Deep Q-Networks for autonomous robot navigation in constrained 2D simulation environments.",
+    "author_name": "Prashanna Tiwari",
+    "license": "MIT",
+    "software_language": "Python",
+    "software_status": "Research prototype",
+    "status": "published",
+    "pdf_size": 411802
+  },
+  {
+    "slug": "semantic-segmentation-autonomous-agricultural-robots",
+    "title": "Semantic Segmentation for Autonomous Agricultural Robots: A U-Net Approach with Auto-Generated Labels",
+    "abstract": "This paper presents the development of a semantic segmentation pipeline designed for autonomous navigation in agricultural environments. Inspired by the NATERIDA microbots project—an AI-powered exploration robot capable of environmental monitoring and intelligent data collection—we implement a U-Net convolutional neural network trained on automatically generated pixel-level annotations. The system uses GroundingDINO for open-vocabulary object detection and the Segment Anything Model (SAM) for mask generation, eliminating the need for manual annotation. Data is collected through a simulated Pioneer 3-AT robot performing random-walk exploration in a Webots physics simulator. The model segments scenes into five terrain classes: soil, vegetation, obstacles, pedestrians, and sky. After training for 100 epochs on an NVIDIA GeForce RTX 4060 Laptop GPU with Albumentations-based data augmentation, the system achieves a validation Intersection-over-Union (IoU) of 0.4453 and a Dice coefficient of 0.5497. While these results indicate moderate performance, they demonstrate a viable pipeline for low-cost dataset creation and segmentation model training without manual labeling effort.",
+    "keywords": "semantic segmentation, U-Net, GroundingDINO, Segment Anything, agricultural robotics, Webots",
+    "pdf_filename": "naterida-segmentation-paper.pdf",
+    "pdf_path": "papers/naterida-segmentation-paper.pdf",
+    "github_url": "https://github.com/dev-prashanna/Image-Segmentation-Naterida",
+    "references": "Prasiddha Mainali, Prashanna Tiwari, and Prince Kumar Mandal, “NATERIDA microbots,” Devpost, Aug. 2025. Available: https://devpost.com/software/naterida-microbots-i4bv8r\nOlaf Ronneberger, Philipp Fischer, and Thomas Brox, “U-Net: Convolutional networks for biomedical image segmentation,” in Proc. MICCAI, 2015, pp. 234–241.\nJonathan Long, Evan Shelhamer, and Trevor Darrell, “Fully convolutional networks for semantic segmentation,” in Proc. CVPR, 2015, pp. 3431–3440.\nLiang-Chieh Chen, Yukun Zhu, George Papandreou, Florian Schroff, and Hartwig Adam, “Encoder-decoder with atrous separable convolution for semantic image segmentation,” in Proc. ECCV, 2018, pp. 801–818.\nEnze Xie, Wenhai Wang, Zhiding Yu, Anima Anandkumar, Jose M. Alvarez, and Ping Luo, “SegFormer: Simple and efficient design for semantic segmentation with transformers,” in Proc. NeurIPS, 2021, pp. 12077–12090.\nShilong Liu, Zhaoyang Zeng, Tianhe Ren, Feng Li, Hao Zhang, et al., “Grounding DINO: Marrying DINO with grounded pre-training for open-set object detection,” in Proc. ECCV, 2024.\nAlexander Kirillov, Eric Mintun, Nikhila Ravi, Hanzi Mao, Chloe Rolland, et al., “Segment Anything,” in Proc. ICCV, 2023, pp. 4015–4026.\nOlivier Michel, “Webots: Professional mobile robot simulation,” International Journal of Advanced Robotic Systems, vol. 1, no. 1, pp. 39–42, 2004.",
+    "published_at": "2026-07-01",
+    "meta_description": "A U-Net semantic segmentation manuscript using GroundingDINO and SAM to generate terrain labels for simulated agricultural robots.",
+    "author_name": "Prashanna Tiwari",
+    "license": "MIT",
+    "software_language": "Python",
+    "software_status": "Research prototype",
+    "status": "published",
+    "pdf_size": 2407291
+  }
+]

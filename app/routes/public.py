@@ -23,6 +23,7 @@ from app.models import (
     ContactMessage,
     Event,
     Project,
+    Publication,
     TeamMember,
 )
 from app.utils.helpers import send_email, setting
@@ -215,6 +216,63 @@ def blog_detail(slug):
     )
 
 
+# ------------------------------------------------------------------------ research
+@public_bp.route("/research")
+def research():
+    from app.utils.members import current_member
+
+    query = Publication.query.filter_by(status="published")
+    term = request.args.get("q", "").strip()
+
+    if term:
+        like = f"%{term}%"
+        query = query.filter(
+            db.or_(
+                Publication.title.ilike(like),
+                Publication.author_name.ilike(like),
+                Publication.abstract.ilike(like),
+                Publication.keywords.ilike(like),
+            )
+        )
+
+    publications = query.order_by(Publication.published_at.desc()).all()
+
+    return render_template(
+        "research/index.html",
+        publications=publications,
+        search_term=term,
+        member=current_member(),
+        page_title=setting("research_page_title", "Research"),
+        meta_description=setting(
+            "meta_research_description",
+            "Independent research preprints shared through ADHAYAN.",
+        ),
+    )
+
+
+@public_bp.route("/research/<slug>")
+def research_detail(slug):
+    from app.utils.members import current_member
+
+    publication = Publication.query.filter_by(slug=slug, status="published").first_or_404()
+    more = (
+        Publication.query.filter(
+            Publication.status == "published", Publication.id != publication.id
+        )
+        .order_by(Publication.published_at.desc())
+        .limit(3)
+        .all()
+    )
+    return render_template(
+        "research/detail.html",
+        publication=publication,
+        more=more,
+        member=current_member(),
+        page_title=publication.title,
+        meta_description=publication.meta_description or publication.abstract[:180],
+    )
+
+
 # ----------------------------------------------------------------------------- team
 @public_bp.route("/team")
 def team():
@@ -384,6 +442,7 @@ def sitemap():
         (url_for("public.index"), datetime.utcnow()),
         (url_for("public.about"), datetime.utcnow()),
         (url_for("public.projects"), datetime.utcnow()),
+        (url_for("public.research"), datetime.utcnow()),
         (url_for("public.blog"), datetime.utcnow()),
         (url_for("public.team"), datetime.utcnow()),
         (url_for("public.news"), datetime.utcnow()),
@@ -395,6 +454,8 @@ def sitemap():
         entries.append((url_for("public.project_detail", slug=project.slug), project.updated_at))
     for post in BlogPost.query.filter_by(status="published").all():
         entries.append((url_for("public.blog_detail", slug=post.slug), post.published_at))
+    for pub in Publication.query.filter_by(status="published").all():
+        entries.append((url_for("public.research_detail", slug=pub.slug), pub.published_at))
     for item in Announcement.query.filter_by(status="published").all():
         entries.append((url_for("public.news_detail", slug=item.slug), item.published_at))
 

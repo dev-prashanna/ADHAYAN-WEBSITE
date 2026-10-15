@@ -30,8 +30,10 @@ from app.models import (
     Announcement,
     BlogPost,
     Competition,
+    Dataset,
     Event,
     Project,
+    Publication,
     SiteSetting,
     TeamMember,
 )
@@ -1012,6 +1014,94 @@ EVENT_RECORDS: list[dict] = [
 ]
 
 
+# ------------------------------------------------------------------ publications
+# The bundled PDF is copied into the uploads folder by ``import_content`` so the
+# Zenodo-style record page can preview and serve it.
+_PAPER_PDF_REPO_PATH = Path("research") / "guardrailer-paper.pdf"
+_PAPER_PDF_UPLOAD_PATH = "papers/guardrailer-paper.pdf"
+
+PUBLICATION_RECORDS: list[dict] = [
+    {
+        "slug": "lightweight-prompt-injection-detection",
+        "title": (
+            "Lightweight Prompt Injection Detection: From Centroid-Based Embedding "
+            "Classification to a Hybrid Guardrail"
+        ),
+        "author_name": "Prashanna Tiwari",
+        "abstract": (
+            "Prompt injection remains one of the most practical threats to large language "
+            "model (LLM) applications. This paper presents a lightweight approach to "
+            "prompt-injection detection, moving from centroid-based embedding "
+            "classification toward a hybrid guardrail. We introduce **Guardrailer v1**, a "
+            "dataset of **722,842 prompts**, and show that a simple embedding-centroid "
+            "classifier already captures a large share of injections, while a hybrid "
+            "guardrail combining complementary signals improves robustness at low "
+            "overhead. The method is designed to run close to the model with minimal "
+            "latency, making it suitable for production guardrails."
+        ),
+        "keywords": "prompt injection, LLM security, guardrails, embeddings, classification",
+        "doi": "10.5281/zenodo.22124698",
+        "license": "CC BY 4.0",
+        "pdf_path": _PAPER_PDF_UPLOAD_PATH,
+        "pdf_filename": "PAPER.pdf",
+        "pdf_size": 1_300_000,
+        "github_url": "https://github.com/dev-prashanna/Prompt_Injection_Detection",
+        "dataset_url": (
+            "https://www.kaggle.com/datasets/prashannadeveloper/guardrailer-dataset-v1"
+        ),
+        "software_language": "Python",
+        "software_status": "Active",
+        "references": (
+            "Greshake, K. et al. Not what you've signed up for: Compromising Real-World "
+            "LLM-Integrated Applications. (2023)\n"
+            "Perez, F. & Ribeiro, I. Ignore This Title and HackAPrompt: Exposing "
+            "Systemic Weaknesses of LLMs Through a Global Prompt Injection Competition. "
+            "(2023)\n"
+            "Schneider, J. et al. Prompt Injection Attacks and Defenses in LLM-Integrated "
+            "Applications. (2023)"
+        ),
+        "status": "published",
+        "featured": True,
+        "published_at": datetime(2026, 8, 27, 0, 0),
+        "meta_description": (
+            "A lightweight approach to prompt-injection detection, from centroid-based "
+            "embedding classification to a hybrid guardrail."
+        ),
+    },
+]
+
+
+# --------------------------------------------------------------------- datasets
+DATASET_RECORDS: list[dict] = [
+    {
+        "slug": "guardrailer-dataset-v1",
+        "title": "Guardrailer v1 — Prompt Injection Dataset",
+        "source": "Kaggle",
+        "source_url": (
+            "https://www.kaggle.com/datasets/prashannadeveloper/guardrailer-dataset-v1"
+        ),
+        "license": "CC BY 4.0",
+        "size_label": "208 MB · 722,842 prompts",
+        "tags": "prompt injection, LLM security, guardrails, dataset",
+        "sort_order": 10,
+        "summary": (
+            "A large-scale prompt-injection dataset backing the Lightweight Prompt "
+            "Injection Detection paper."
+        ),
+        "description": (
+            "**Guardrailer v1** is a large-scale prompt-injection dataset used to train and "
+            "evaluate lightweight injection detectors. It contains **722,842 prompts** "
+            "(~208 MB) and is released under **CC BY 4.0**.\n\n"
+            "The dataset accompanies the paper *Lightweight Prompt Injection Detection: "
+            "From Centroid-Based Embedding Classification to a Hybrid Guardrail*."
+        ),
+        "meta_description": (
+            "Guardrailer v1 — a 722k-prompt injection dataset on Kaggle (CC BY 4.0)."
+        ),
+    },
+]
+
+
 # --------------------------------------------------------------------- helpers
 def apply_default_settings(db, force: bool = False) -> int:
     """Create any missing site settings. Existing values are kept unless forced."""
@@ -1061,6 +1151,8 @@ def import_content(db) -> dict[str, int]:
         "announcements": 0,
         "events": 0,
         "competitions": 0,
+        "publications": 0,
+        "datasets": 0,
     }
 
     for record in TEAM_RECORDS:
@@ -1097,6 +1189,15 @@ def import_content(db) -> dict[str, int]:
             project.cover_image = cover
     for record in PROJECT_RECORDS:
         counts["projects"] += int(_insert(db, Project, record))
+    # Correct the original segmentation credit while preserving custom CMS edits.
+    segmentation = Project.query.filter_by(slug="image-segmentation-naterida").first()
+    if segmentation is not None and segmentation.contributors == (
+        "Prasiddha Mainali, Prashanna Tiwari, Prince Kumar Mandal"
+    ):
+        segmentation.contributors = "Prashanna Tiwari"
+    from app.project_covers import backfill_project_covers
+
+    backfill_project_covers(Project)
     for record in BLOG_RECORDS:
         counts["posts"] += int(_insert(db, BlogPost, record))
     for record in ANNOUNCEMENT_RECORDS:
@@ -1106,6 +1207,25 @@ def import_content(db) -> dict[str, int]:
         counts["competitions" if record["model"] == "competition" else "events"] += int(
             _insert(db, model, record)
         )
+    for record in DATASET_RECORDS:
+        counts["datasets"] += int(_insert(db, Dataset, record))
+    for record in PUBLICATION_RECORDS:
+        counts["publications"] += int(_insert(db, Publication, record))
+    from app.repository_publications import import_repository_publications
+
+    counts["publications"] += import_repository_publications(db)
+
+    # Publish the bundled paper PDF so the record page can preview and serve it.
+    publication = Publication.query.filter_by(
+        slug="lightweight-prompt-injection-detection"
+    ).first()
+    if publication is not None and publication.pdf_path:
+        destination = Path(current_app.config["UPLOAD_FOLDER"]) / publication.pdf_path
+        source = Path(current_app.static_folder) / _PAPER_PDF_REPO_PATH
+        if source.exists():
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            if not destination.exists():
+                shutil.copyfile(source, destination)
 
     db.session.commit()
     return counts

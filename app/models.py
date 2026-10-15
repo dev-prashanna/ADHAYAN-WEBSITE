@@ -60,8 +60,55 @@ class User(UserMixin, db.Model):
         return f"<User {self.username}>"
 
 
+APPLICATION_STATUSES = ("pending", "approved", "rejected")
+
+
+class Member(TimestampMixin, db.Model):
+    """A researcher who joined via Google and can submit papers.
+
+    Members are separate from administrator ``User`` accounts: they sign in
+    with Google OAuth and only gain access after submitting an application.
+    """
+
+    __tablename__ = "members"
+
+    id = db.Column(db.Integer, primary_key=True)
+    google_id = db.Column(db.String(64), unique=True, nullable=True, index=True)
+    email = db.Column(db.String(255), unique=True, nullable=False, index=True)
+    name = db.Column(db.String(160), default="", nullable=False)
+    avatar_url = db.Column(db.String(400), default="", nullable=False)
+    research_interests = db.Column(db.Text, default="", nullable=False)
+    application_essay = db.Column(db.Text, default="", nullable=False)
+    essay_score = db.Column(db.Integer, nullable=True)
+    application_status = db.Column(
+        db.String(16), default="pending", nullable=False, index=True
+    )
+    applied_at = db.Column(db.DateTime, nullable=True)
+    approved_at = db.Column(db.DateTime, nullable=True)
+
+    @property
+    def is_approved(self) -> bool:
+        return self.application_status == "approved"
+
+    @property
+    def initials(self) -> str:
+        parts = (self.name or self.email or "?").split()
+        return "".join(p[0].upper() for p in parts[:2]) if parts else "?"
+
+    def __repr__(self) -> str:  # pragma: no cover
+        return f"<Member {self.email}>"
+
+
 class Project(TimestampMixin, PublishableMixin, db.Model):
     __tablename__ = "projects"
+
+    @property
+    def cover_credit(self):
+        from app.project_covers import PROJECT_COVERS, cover_path
+
+        if self.cover_image == cover_path(self.slug):
+            return PROJECT_COVERS.get(self.slug)
+        return None
 
     id = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(160), unique=True, nullable=False, index=True)
@@ -203,6 +250,94 @@ class Competition(EventBase, db.Model):
     @property
     def type_label(self) -> str:
         return "Competition"
+
+
+class Dataset(TimestampMixin, PublishableMixin, db.Model):
+    """A public dataset published by ADHAYAN (e.g. on Kaggle or Zenodo)."""
+
+    __tablename__ = "datasets"
+
+    id = db.Column(db.Integer, primary_key=True)
+    slug = db.Column(db.String(160), unique=True, nullable=False, index=True)
+    title = db.Column(db.String(200), nullable=False)
+    summary = db.Column(db.String(400), default="", nullable=False)
+    description = db.Column(db.Text, default="", nullable=False)  # Markdown
+    source = db.Column(db.String(80), default="Kaggle", nullable=False)
+    source_url = db.Column(db.String(400), default="", nullable=False)
+    license = db.Column(db.String(120), default="", nullable=False)
+    size_label = db.Column(db.String(80), default="", nullable=False)
+    tags = db.Column(db.String(300), default="", nullable=False)  # comma list
+    cover_image = db.Column(db.String(500), default="", nullable=False)
+    meta_description = db.Column(db.String(300), default="", nullable=False)
+    sort_order = db.Column(db.Integer, default=0, nullable=False, index=True)
+
+    @property
+    def tag_list(self) -> list[str]:
+        return [t.strip() for t in (self.tags or "").split(",") if t.strip()]
+
+
+class Publication(TimestampMixin, PublishableMixin, db.Model):
+    """A research paper submitted by a member (Zenodo-style record)."""
+
+    __tablename__ = "publications"
+
+    id = db.Column(db.Integer, primary_key=True)
+    slug = db.Column(db.String(200), unique=True, nullable=False, index=True)
+    title = db.Column(db.String(300), nullable=False)
+    author_name = db.Column(db.String(160), default="", nullable=False)
+    member_id = db.Column(
+        db.Integer, db.ForeignKey("members.id"), nullable=True, index=True
+    )
+    abstract = db.Column(db.Text, default="", nullable=False)
+    keywords = db.Column(db.String(300), default="", nullable=False)  # comma list
+    doi = db.Column(db.String(120), default="", nullable=False)
+    license = db.Column(db.String(120), default="CC BY 4.0", nullable=False)
+    pdf_path = db.Column(db.String(300), default="", nullable=False)  # relative path
+    pdf_filename = db.Column(db.String(255), default="", nullable=False)
+    pdf_size = db.Column(db.Integer, default=0, nullable=False)  # bytes
+    github_url = db.Column(db.String(400), default="", nullable=False)
+    dataset_url = db.Column(db.String(400), default="", nullable=False)
+    software_language = db.Column(db.String(80), default="", nullable=False)
+    software_status = db.Column(db.String(80), default="", nullable=False)
+    references = db.Column(db.Text, default="", nullable=False)  # one per line
+    meta_description = db.Column(db.String(300), default="", nullable=False)
+    published_at = db.Column(db.DateTime, default=utcnow, nullable=False, index=True)
+
+    member = db.relationship("Member", backref=db.backref("publications", lazy="dynamic"))
+
+    @property
+    def publication_date_label(self) -> str:
+        # The segmentation manuscript gives only a month, not an exact day.
+        if (
+            self.slug == "semantic-segmentation-autonomous-agricultural-robots"
+            and self.published_at == datetime(2026, 7, 1)
+        ):
+            return "July 2026"
+        return self.published_at.strftime("%B %d, %Y")
+
+    @property
+    def keyword_list(self) -> list[str]:
+        return [k.strip() for k in (self.keywords or "").split(",") if k.strip()]
+
+    @property
+    def reference_list(self) -> list[str]:
+        return [r.strip() for r in (self.references or "").split("\n") if r.strip()]
+
+    @property
+    def has_pdf(self) -> bool:
+        return bool(self.pdf_path)
+
+    @property
+    def pdf_size_label(self) -> str:
+        if not self.pdf_size:
+            return ""
+        mb = self.pdf_size / (1024 * 1024)
+        if mb >= 1:
+            return f"{mb:.1f} MB"
+        return f"{max(1, round(self.pdf_size / 1024))} KB"
+
+    def __repr__(self) -> str:  # pragma: no cover
+        return f"<Publication {self.slug}>"
 
 
 class SiteSetting(db.Model):

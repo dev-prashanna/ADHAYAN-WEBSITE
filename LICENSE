@@ -1,67 +1,86 @@
-PROPRIETARY SOURCE-AVAILABLE LICENSE — ADHAYAN WEBSITE
-========================================================
+ALL RIGHTS RESERVED — PROPRIETARY LICENSE — ADHAYAN WEBSITE
+============================================================
 
-Copyright (c) 2026 Prashanna Tiwari (dev-prashanna). All rights reserved.
+Copyright (c) October 15, 2026 Prashanna Tiwari (dev-prashanna).
+All rights reserved. Made by Prashanna Tiwari.
 
 This repository contains the source code for the ADHAYAN website and its
-content-management system ("the Software").
+content-management system ("the Software"). This is NOT an open-source
+license. No copyright is dedicated to the public domain.
 
 1. DEFINITIONS
    "ADHAYAN" refers to the organization, its name, acronym, wordmark, logos
    (including adhayan-logo.png, adhayan-logo.webp, adhayan-logo-mark.webp),
    visual identity, taglines, and associated branding.
    "The Software" refers to all source code, templates, styles, scripts,
-   documentation, and assets in this repository.
+   documentation, data, and assets in this repository.
+   "Copyist" refers to any person or entity that is not the copyright holder.
 
-2. GRANT OF LICENSE
-   You are granted a limited, non-exclusive, non-transferable, revocable
-   license to:
-   a. View and read the source code for personal, non-commercial purposes.
-   b. Fork this repository for private study, learning, or contribution
-      back to this repository via pull request.
-   c. Run a local copy of the Software for personal, non-commercial
-      evaluation.
+2. OWNERSHIP
+   The copyright holder retains absolute, exclusive ownership of the Software
+   and the ADHAYAN brand. Except for the limited permissions in Section 3,
+   no rights are granted.
 
-3. RESTRICTIONS
-   You may NOT, without prior written permission from the copyright holder:
-   a. Use the name "ADHAYAN", its acronym, logos, or any confusingly
-      similar name or branding for any project, product, service,
-      organization, website, or social-media account.
-   b. Deploy the Software, or a derivative of it, as a public website or
-      service that impersonates or appears to be the official ADHAYAN
-      presence.
-   c. Redistribute, sell, sublicense, or relicense the Software or any
-      modified version of it.
-   d. Remove, alter, or obscure any copyright, trademark, or branding
-      notices in the Software or its assets.
-   e. Use the ADHAYAN branding in a way that suggests endorsement,
-      sponsorship, or affiliation by the ADHAYAN organization.
+3. LIMITED PERMISSION
+   Copyists are granted ONLY the following revocable permissions:
+   a. View the source code on GitHub for personal, non-commercial study.
+   b. Run a private local copy solely to evaluate the Software.
+   c. Submit pull requests to THIS repository only (see Section 6).
+   No other permission is granted, expressly or by implication.
 
-4. TRADEMARK NOTICE
-   "ADHAYAN" and the associated logos are trademarks of the ADHAYAN
-   organization. This license does not grant any trademark rights. Any
-   unauthorized use of the ADHAYAN name or branding constitutes trademark
-   infringement.
+4. STRICT PROHIBITIONS
+   Copyists may NOT, under any circumstances and without prior WRITTEN
+   permission from the copyright holder:
+   a. Copy, clone, fork-and-redeploy, scrape, mirror, or reproduce any part
+      of the Software outside a private local evaluation.
+   b. Deploy the Software, or any derivative of it, as a public website,
+      service, API, SaaS, or hosted product.
+   c. Use the Software as a template, boilerplate, starter kit, or base for
+      another website, project, or organization.
+   d. Modify the Software and distribute, publish, or redistribute the
+      modified version in any form.
+   e. Sell, sublicense, rent, lease, or otherwise commercialize the Software
+      or any derivative of it.
+   f. Remove, alter, or obscure any copyright, trademark, branding, or
+      attribution notices (including "Made by Prashanna Tiwari").
+   g. Use the name "ADHAYAN", its acronym, logos, or any confusingly similar
+      name or branding for any project, product, service, organization,
+      website, or social-media account.
+   h. Suggest endorsement, sponsorship, or affiliation by ADHAYAN or
+      Prashanna Tiwari without written permission.
 
-5. CONTRIBUTIONS
-   By submitting a pull request, you grant the copyright holder a
-   perpetual, irrevocable, worldwide, royalty-free license to use,
-   modify, and redistribute your contribution as part of the Software.
+5. TRADEMARK NOTICE
+   "ADHAYAN" and the associated logos are trademarks of the copyright
+   holder. This license grants NO trademark rights. Unauthorized use of the
+   ADHAYAN name or branding constitutes trademark infringement.
 
-6. TERMINATION
-   This license terminates automatically if you breach any of its terms.
-   Upon termination, you must cease all use of the Software and the
-   ADHAYAN branding, and destroy all copies in your possession.
+6. CONTRIBUTIONS
+   By submitting a pull request to this repository, you grant the copyright
+   holder a perpetual, irrevocable, worldwide, royalty-free, exclusive
+   license to use, modify, and redistribute your contribution as part of the
+   Software. You retain copyright in your contribution but agree it may be
+   relicensed under this or any future license chosen by the copyright
+   holder.
 
-7. NO WARRANTY
+7. TERMINATION
+   This license terminates AUTOMATICALLY upon any breach of its terms.
+   Upon termination, the Copyist must immediately cease all use, destroy all
+   copies (including local clones and forks where redistribution occurred),
+   and delete any deployed instances. Continued use after termination
+   constitutes copyright infringement.
+
+8. ENFORCEMENT
+   The copyright holder may seek injunctive relief, statutory damages, actual
+   damages, disgorgement of profits, and attorneys' fees for any violation.
+   Liability attaches to individuals and entities alike.
+
+9. NO WARRANTY
    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR
-   ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM USE OF THE
-   SOFTWARE.
+   EXPRESS OR IMPLIED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR
+   ANY CLAIM, DAMAGES, OR LIABILITY ARISING FROM USE OF THE SOFTWARE.
 
-8. GOVERNING LAW
-   This license shall be governed by the laws of Nepal.
+10. GOVERNING LAW
+    This license shall be governed by the laws of Nepal. Any dispute shall
+    be resolved in the courts of Nepal.
 
 For permission requests, contact: developerprashanna@gmail.com

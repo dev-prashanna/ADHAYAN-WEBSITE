@@ -45,7 +45,23 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {"connect_args": {"check_same_thread": False}}
     UPLOAD_FOLDER = Path(os.environ.get("UPLOAD_FOLDER") or (DATA_DIR / "uploads"))
-    MAX_CONTENT_LENGTH = 8 * 1024 * 1024  # 8 MB request ceiling
+    MAX_CONTENT_LENGTH = int(os.environ.get("MAX_CONTENT_LENGTH", 20 * 1024 * 1024))  # 20 MB request ceiling (room for PDF uploads)
+
+    # ------------------------------------------------- google oauth (members)
+    GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
+    GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
+    GOOGLE_DISCOVERY_URL = os.environ.get(
+        "GOOGLE_DISCOVERY_URL",
+        "https://accounts.google.com/.well-known/openid-configuration",
+    )
+
+    # ------------------------------------------------------ application review
+    # Groq-hosted LLM that scores join applications for curiosity/willingness.
+    # Get a key at https://console.groq.com/keys — when unset, applications
+    # stay "pending" for manual review instead of being auto-scored.
+    GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+    GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-20b")
+    APPLICATION_MIN_SCORE = int(os.environ.get("APPLICATION_MIN_SCORE", 7))
 
     # ---------------------------------------------------------------- session
     PERMANENT_SESSION_LIFETIME = int(os.environ.get("SESSION_LIFETIME_SECONDS", 86400))

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
-{% from "_macros.html" import page_header, empty_state %}
+{% from "_macros.html" import page_header, empty_state, bg_video as bg_video_layer %}
+
+{% block bg_video %}{{ bg_video_layer('events') }}{% endblock %}
 
 {% macro event_card(item) -%}
 <article class="card card-glow card-hover flex flex-col overflow-hidden reveal">

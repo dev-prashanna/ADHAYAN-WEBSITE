@@ -16,7 +16,9 @@ from flask import current_app
 from PIL import Image, ImageOps
 
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
+ALLOWED_DOCUMENT_EXTENSIONS = {".pdf"}
 MAX_IMAGE_SIDE = 1920
+MAX_DOCUMENT_BYTES = 16 * 1024 * 1024  # 16 MB ceiling for uploaded PDFs
 
 
 class UploadError(ValueError):
@@ -29,6 +31,40 @@ def _extension(filename: str) -> str:
 
 def allowed_file(filename: str | None) -> bool:
     return bool(filename) and _extension(filename) in ALLOWED_EXTENSIONS
+
+
+def save_document(file, subfolder: str = "documents") -> tuple[str, str, int]:
+    """Store an uploaded PDF and return ``(relative_path, original_name, size)``.
+
+    The file is kept as-is (no re-encoding) so the original PDF can be served
+    and embedded. Only the extension is validated; the name is randomised.
+    """
+    if file is None or not file.filename:
+        raise UploadError("No file selected.")
+
+    if _extension(file.filename) not in ALLOWED_DOCUMENT_EXTENSIONS:
+        raise UploadError("Only PDF files can be uploaded.")
+
+    file.stream.seek(0, os.SEEK_END)
+    size = file.stream.tell()
+    file.stream.seek(0)
+    if size > MAX_DOCUMENT_BYTES:
+        raise UploadError("PDF is larger than 16 MB.")
+    if size == 0:
+        raise UploadError("The uploaded file is empty.")
+
+    raw = file.read()
+    if not raw.startswith(b"%PDF"):
+        raise UploadError("The file does not look like a valid PDF.")
+
+    today = datetime.utcnow()
+    folder = Path(current_app.config["UPLOAD_FOLDER"]) / subfolder / f"{today:%Y}/{today:%m}"
+    folder.mkdir(parents=True, exist_ok=True)
+
+    name = f"{uuid.uuid4().hex}.pdf"
+    (folder / name).write_bytes(raw)
+
+    return f"{subfolder}/{today:%Y}/{today:%m}/{name}", Path(file.filename).name, size
 
 
 def save_image(file, subfolder: str = "images") -> str:

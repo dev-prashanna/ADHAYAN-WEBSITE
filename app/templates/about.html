@@ -12,7 +12,7 @@
     <div class="reveal">
       <p class="eyebrow">Who we are</p>
       <h2 class="display-md mt-6 text-balance">{{ s('org_full_name') }}</h2>
-      <div class="mt-7 space-y-5 text-[17px] leading-relaxed text-mist">
+      <div class="mt-7 space-y-5 text-base leading-relaxed text-mist">
         {% for para in s('intro_body')|paragraphs %}
           <p>{{ para }}</p>
         {% endfor %}
@@ -37,12 +37,12 @@
       <article class="card card-glow p-8">
         <span class="badge">Mission</span>
         <h3 class="mt-5 font-display text-2xl">{{ s('mission_title') }}</h3>
-        <p class="mt-4 text-[15px] leading-relaxed text-mist">{{ s('mission_body') }}</p>
+        <p class="mt-4 text-base leading-relaxed text-mist">{{ s('mission_body') }}</p>
       </article>
       <article class="card card-glow p-8">
         <span class="badge">Vision</span>
         <h3 class="mt-5 font-display text-2xl">{{ s('vision_title') }}</h3>
-        <p class="mt-4 text-[15px] leading-relaxed text-mist">{{ s('vision_body') }}</p>
+        <p class="mt-4 text-base leading-relaxed text-mist">{{ s('vision_body') }}</p>
       </article>
     </div>
   </div>
@@ -98,7 +98,7 @@
       {% for para in s('history_body')|paragraphs %}
       <li class="relative reveal">
         <span class="absolute -left-[31px] top-2 h-2.5 w-2.5 rounded-full bg-gradient-to-br from-accent to-violet ring-4 ring-ink-950 sm:-left-[47px]"></span>
-        <p class="text-[16px] leading-relaxed text-mist">{{ para }}</p>
+        <p class="text-base leading-relaxed text-mist">{{ para }}</p>
       </li>
       {% endfor %}
     </ol>

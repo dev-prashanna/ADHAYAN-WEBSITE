@@ -8,7 +8,7 @@
 <section class="relative overflow-hidden pt-16 pb-24 sm:pt-24 sm:pb-32">
   <div class="pointer-events-none absolute inset-0 grid-bg opacity-70"></div>
   <div class="shell relative">
-    <div class="grid items-center gap-14 lg:grid-cols-[1fr_auto] lg:gap-10">
+    <div class="home-hero-layout grid items-center gap-14 lg:grid-cols-[1fr_auto] lg:gap-10">
       <div class="max-w-4xl">
       <p class="eyebrow reveal">{{ s('hero_eyebrow') }}</p>
 
@@ -42,11 +42,8 @@
       </dl>
       </div>
 
-      <div class="flex justify-center lg:justify-end reveal">
+      <div class="home-hero-art flex justify-center lg:justify-end reveal">
         <div class="hero-logo" aria-hidden="true">
-          <span class="hero-logo-glow"></span>
-          <span class="hero-logo-ring"></span>
-          <span class="hero-logo-ring hero-logo-ring-2"></span>
           <img src="{{ url_for('static', filename='images/adhayan-logo.png') }}"
                alt="" width="340" height="340" fetchpriority="high"
                class="hero-logo-img">
@@ -58,8 +55,8 @@
 
 <!-- ============================================================== INTRO -->
 <section class="section border-t border-white/[0.06]">
-  <div class="shell grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
-    <div class="reveal">
+  <div class="home-intro-layout shell grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+    <div class="home-intro-copy reveal">
       <p class="eyebrow">{{ s('org_name') }} / introduction</p>
       <h2 class="display-lg mt-6 text-balance">{{ s('intro_heading') }}</h2>
       <div class="divider mt-8"></div>
@@ -70,7 +67,7 @@
       </div>
     </div>
 
-    <div class="grid gap-5 sm:grid-cols-2">
+    <div class="home-intro-cards grid gap-5 sm:grid-cols-2">
       <article class="card card-glow card-hover p-7 reveal">
         <span class="badge">Mission</span>
         <h3 class="mt-5 font-display text-2xl">{{ s('mission_title') }}</h3>
@@ -119,7 +116,7 @@
           {% if project.cover_image %}
             <img src="{{ project.cover_image if project.cover_image.startswith(('http', '/static/')) else url_for('public.media', filename=project.cover_image) }}"
                  alt="{{ project.title }}" loading="lazy" decoding="async"
-                 class="h-full w-full {{ 'object-contain' if project.cover_image.startswith(('images/projects/', '/static/images/projects/')) else 'object-cover' }} transition duration-500 group-hover:scale-105">
+                 class="h-full w-full {{ 'object-contain' if project.cover_image.startswith(('images/projects/', '/static/images/projects/')) and (not project.cover_image.endswith('.webp') or project.slug == 'transformer-from-scratch') else 'object-cover' }} transition duration-500 group-hover:scale-105">
           {% else %}
             <div class="flex h-full w-full items-center justify-center">
               <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">{{ project.category }}</span>

@@ -14,6 +14,23 @@ from app.models import (
 )
 
 
+def test_project_covers_backfill_without_overwriting_custom_images(app):
+    from app.project_covers import backfill_project_covers, cover_path
+
+    with app.app_context():
+        blank = Project(slug="transformer-from-scratch", title="Transformer")
+        custom = Project(slug="fifa-data-exploration", title="FIFA", cover_image="uploads/custom.png")
+        db.session.add_all([blank, custom])
+        db.session.commit()
+
+        assert backfill_project_covers(Project) == 1
+        assert blank.cover_image == cover_path(blank.slug)
+        assert blank.cover_credit["author"] == "dvgodoy"
+        assert custom.cover_image == "uploads/custom.png"
+        assert custom.cover_credit is None
+        assert backfill_project_covers(Project) == 0
+
+
 def test_seed_imports_expected_records(app):
     from app.seed import import_content
 

@@ -26,6 +26,7 @@ from app.models import (
     PUBLISH_STATES,
     BlogPost,
     Project,
+    Publication,
 )
 
 IMAGE_EXTENSIONS = ["png", "jpg", "jpeg", "webp", "gif"]
@@ -70,6 +71,63 @@ class ContactForm(FlaskForm):
     def validate_website(self, field):  # honeypot – humans never fill this in
         if field.data:
             raise ValidationError("Invalid submission.")
+
+
+class JoinForm(FlaskForm):
+    """Application submitted after signing in with Google."""
+
+    name = StringField("Full name", validators=[DataRequired(), Length(min=2, max=160)])
+    email = StringField("Email", validators=[DataRequired(), Email(), Length(max=255)])
+    application_essay = TextAreaField(
+        "What is your research interest, and why do you want to collaborate?",
+        validators=[DataRequired(), Length(min=150, max=5000)],
+        description=(
+            "Write at least 150 characters. Your answer is reviewed for "
+            "genuine curiosity and willingness to collaborate."
+        ),
+    )
+    submit = SubmitField("Submit application")
+
+
+class PublicationForm(FlaskForm):
+    """Form used by approved members to submit a research paper."""
+
+    title = StringField("Title", validators=[DataRequired(), Length(max=300)])
+    abstract = TextAreaField(
+        "Abstract",
+        validators=[DataRequired(), Length(min=20, max=40000)],
+    )
+    keywords = StringField(
+        "Keywords", validators=[Optional(), Length(max=300)],
+        description="Comma-separated, e.g. prompt injection, LLM security.",
+    )
+    doi = StringField("DOI", validators=[Optional(), Length(max=120)])
+    license = StringField(
+        "License", validators=[Optional(), Length(max=120)], default="CC BY 4.0"
+    )
+    github_url = StringField(
+        "GitHub repository", validators=[Optional(), URL(), Length(max=400)]
+    )
+    dataset_url = StringField(
+        "Dataset link", validators=[Optional(), URL(), Length(max=400)]
+    )
+    software_language = StringField(
+        "Software language", validators=[Optional(), Length(max=80)],
+        description="e.g. Python",
+    )
+    software_status = StringField(
+        "Software status", validators=[Optional(), Length(max=80)],
+        description="e.g. Active",
+    )
+    references = TextAreaField(
+        "References", validators=[Optional(), Length(max=20000)],
+        description="One reference per line.",
+    )
+    pdf_upload = FileField(
+        "PDF file",
+        validators=[FileAllowed(["pdf"], "Only PDF files can be uploaded.")],
+    )
+    submit = SubmitField("Publish research")
 
 
 class LoginForm(FlaskForm):

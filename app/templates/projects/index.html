@@ -48,7 +48,7 @@
           {% if project.cover_image %}
             <img src="{{ project.cover_image if project.cover_image.startswith(('http', '/static/')) else url_for('public.media', filename=project.cover_image) }}"
                  alt="{{ project.title }}" loading="lazy" decoding="async"
-                 class="h-full w-full {{ 'object-contain' if project.cover_image.startswith(('images/projects/', '/static/images/projects/')) else 'object-cover' }} transition duration-500 group-hover:scale-105">
+                 class="h-full w-full {{ 'object-contain' if project.cover_image.startswith(('images/projects/', '/static/images/projects/')) and (not project.cover_image.endswith('.webp') or project.slug == 'transformer-from-scratch') else 'object-cover' }} transition duration-500 group-hover:scale-105">
           {% else %}
             <div class="flex h-full w-full items-center justify-center">
               <span class="font-mono text-[11px] uppercase tracking-[0.3em] text-mist-soft">{{ project.category }}</span>

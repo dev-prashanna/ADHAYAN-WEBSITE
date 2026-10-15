@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}{{ publication.title }}{% endblock %}
+{% block og_title %}{{ publication.title }}{% endblock %}
+{% block tw_title %}{{ publication.title }}{% endblock %}
+
+{% block bg_video %}<div class="research-backdrop" aria-hidden="true"></div>{% endblock %}
+
+{% block content %}
+<div class="research-detail">
+<section class="research-masthead relative overflow-hidden border-b border-white/[0.06] pt-10 pb-12 sm:pt-14">
+  <div class="pointer-events-none absolute inset-0 grid-bg opacity-50"></div>
+  <div class="shell relative">
+    <nav aria-label="Breadcrumb" class="font-mono text-[11px] uppercase tracking-[0.2em] text-mist-soft">
+      <a href="{{ url_for('public.research') }}" class="hover:text-accent-soft">Research</a>
+      <span class="mx-2">/</span>
+      <span class="text-mist">Preprint</span>
+    </nav>
+
+    <h1 class="display-lg mt-6 max-w-4xl text-balance">{{ publication.title }}</h1>
+    <p class="mt-4 text-sm text-mist">Independent research · Preprint</p>
+
+    <div class="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-mist-soft">
+      <span class="text-mist-bright">{{ publication.author_name }}</span>
+      <span class="h-1 w-1 rounded-full bg-white/20"></span>
+      <time datetime="{{ publication.published_at.strftime('%Y-%m-%d') }}">{{ publication.publication_date_label }}</time>
+      {% if publication.license %}
+      <span class="h-1 w-1 rounded-full bg-white/20"></span>
+      <span>{{ publication.license }}</span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<article class="research-article section">
+  <div class="research-layout shell grid gap-6 lg:grid-cols-[minmax(0,2.6fr)_minmax(0,1fr)]">
+    {# ============================================================== main column #}
+    <div class="research-sheet min-w-0 space-y-12">
+      {% if publication.abstract %}
+      <section>
+        <h2 class="eyebrow">Abstract</h2>
+        <div class="prose-adhayan mt-5">{{ publication.abstract|markdown }}</div>
+      </section>
+      {% endif %}
+
+      {% if publication.has_pdf %}
+      <section>
+        <h2 class="eyebrow">Files</h2>
+        <div class="card mt-5 overflow-hidden">
+          <div class="flex items-center justify-between gap-4 border-b border-white/[0.07] px-6 py-4">
+            <div class="flex min-w-0 items-center gap-3">
+              <span class="badge badge-live">PDF</span>
+              <span class="truncate text-sm text-mist-bright">{{ publication.pdf_filename or 'paper.pdf' }}</span>
+              {% if publication.pdf_size_label %}<span class="shrink-0 text-xs text-mist-soft">{{ publication.pdf_size_label }}</span>{% endif %}
+            </div>
+            <a href="{{ url_for('public.media', filename=publication.pdf_path) }}"
+               class="btn-ghost !py-2 !text-xs" target="_blank" rel="noopener">Download</a>
+          </div>
+          <iframe
+            src="{{ url_for('public.media', filename=publication.pdf_path) }}#view=FitH"
+            title="PDF preview of {{ publication.title }}"
+            class="h-[70vh] w-full border-0 bg-ink-900"
+            loading="lazy"></iframe>
+        </div>
+        <div class="research-file-row mt-3 flex flex-wrap items-center justify-between gap-3 text-sm">
+          <span class="min-w-0 break-all">{{ publication.pdf_filename or 'paper.pdf' }}{% if publication.pdf_size_label %} · {{ publication.pdf_size_label }}{% endif %}</span>
+          <a href="{{ url_for('public.media', filename=publication.pdf_path) }}" target="_blank" rel="noopener" class="font-medium underline underline-offset-4">Open full-screen ↗</a>
+        </div>
+      </section>
+      {% endif %}
+
+      {% if publication.github_url or publication.software_language or publication.software_status %}
+      <section>
+        <h2 class="eyebrow">Software</h2>
+        <dl class="card mt-5 divide-y divide-white/[0.06]">
+          {% if publication.github_url %}
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-1 px-6 py-4">
+            <dt class="w-40 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Repository</dt>
+            <dd class="min-w-0 break-all text-sm">
+              <a href="{{ publication.github_url }}" class="text-accent-soft hover:underline" target="_blank" rel="noopener noreferrer">{{ publication.github_url }}</a>
+            </dd>
+          </div>
+          {% endif %}
+          {% if publication.software_language %}
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-1 px-6 py-4">
+            <dt class="w-40 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Language</dt>
+            <dd class="text-sm text-mist-bright">{{ publication.software_language }}</dd>
+          </div>
+          {% endif %}
+          {% if publication.software_status %}
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-1 px-6 py-4">
+            <dt class="w-40 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Development status</dt>
+            <dd class="text-sm text-mist-bright">{{ publication.software_status }}</dd>
+          </div>
+          {% endif %}
+        </dl>
+      </section>
+      {% endif %}
+
+      {% if publication.reference_list %}
+      <section>
+        <h2 class="eyebrow">References</h2>
+        <ul class="card mt-5 list-disc space-y-3 px-6 py-5 pl-10 text-sm leading-relaxed text-mist">
+          {% for ref in publication.reference_list %}
+            <li>{{ ref }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+    </div>
+
+    {# ============================================================== side column #}
+    <aside class="research-sidebar space-y-5 lg:self-start" aria-label="Preprint information">
+      <div class="card p-6">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Credits</p>
+        <p class="mt-3 text-sm text-mist-bright">{{ publication.author_name }}</p>
+        <p class="mt-1 text-xs text-mist-soft">Independent researcher</p>
+        {% if publication.member %}
+          <p class="mt-1 text-xs text-mist-soft">ADHAYAN research network</p>
+        {% endif %}
+      </div>
+
+      <dl class="card divide-y divide-white/[0.06] text-sm">
+        <div class="px-6 py-4">
+          <dt class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Preprint date</dt>
+          <dd class="mt-1 text-mist-bright">{{ publication.publication_date_label }}</dd>
+        </div>
+        <div class="px-6 py-4">
+          <dt class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Resource type</dt>
+          <dd class="mt-1 text-mist-bright">Preprint</dd>
+        </div>
+        <div class="px-6 py-4">
+          <dt class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">Research type</dt>
+          <dd class="mt-1 text-mist-bright">Independent research</dd>
+        </div>
+        {% if publication.license %}
+        <div class="px-6 py-4">
+          <dt class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">License</dt>
+          <dd class="mt-1 text-mist-bright">{{ publication.license }}</dd>
+        </div>
+        {% endif %}
+        {% if publication.doi %}
+        <div class="px-6 py-4">
+          <dt class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft">DOI</dt>
+          <dd class="mt-1 break-all text-accent-soft">{{ publication.doi }}</dd>
+        </div>
+        {% endif %}
+      </dl>
+
+      {% if publication.dataset_url %}
+      <div class="card p-6">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Dataset</p>
+        <a href="{{ publication.dataset_url }}" class="mt-3 block break-all text-sm text-accent-soft hover:underline" target="_blank" rel="noopener noreferrer">{{ publication.dataset_url }}</a>
+      </div>
+      {% endif %}
+
+      {% if publication.keyword_list %}
+      <div class="card p-6">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Keywords</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          {% for kw in publication.keyword_list %}<span class="chip">{{ kw }}</span>{% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <section class="card p-6">
+        <h2 class="eyebrow">Citation</h2>
+        <p class="mt-3 break-words text-sm">{{ publication.author_name }} ({{ publication.published_at.strftime('%Y') }}). <em>{{ publication.title }}</em> [Preprint]. Independent research.{% if publication.doi %} DOI: {{ publication.doi }}{% endif %}</p>
+      </section>
+
+      <a href="{{ url_for('public.research') }}" class="btn-ghost w-full justify-center">← All research</a>
+    </aside>
+  </div>
+</article>
+
+{% if more %}
+<section class="border-t border-white/[0.06] py-16">
+  <div class="shell">
+    <p class="eyebrow">More research</p>
+    <div class="mt-8 grid gap-6 md:grid-cols-3">
+      {% for item in more %}
+      <a href="{{ url_for('public.research_detail', slug=item.slug) }}" class="card card-glow card-hover group p-6">
+        <time class="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-soft" datetime="{{ item.published_at.strftime('%Y-%m-%d') }}">{{ item.publication_date_label }}</time>
+        <h3 class="mt-3 font-display text-lg leading-snug transition group-hover:text-accent-soft">{{ item.title }}</h3>
+        <p class="mt-2 text-xs text-mist">{{ item.author_name }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+</div>
+{% endblock %}

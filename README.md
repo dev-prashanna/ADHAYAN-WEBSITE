@@ -1,5 +1,7 @@
 # ADHAYAN — Website
 
+**Made by Prashanna Tiwari — October 15, 2026.** All rights reserved (see [`LICENSE`](LICENSE)).
+
 The official public website and content-management system for **ADHAYAN**
 (AI-Driven Hub for Advanced Youth and Academic Networking), a youth-driven
 academic network connecting students, educators and researchers working in
@@ -13,6 +15,13 @@ student developer can run, deploy and maintain the whole system.
 
 - **Public website** — homepage, about, project gallery, blogs & research,
   cofounders/team, news, events & competitions, contact form
+- **Research repository** (`/research`) — searchable preprint board; approved
+  members submit PDFs with abstract, keywords, DOI, code and dataset links
+- **Member accounts** — Google OAuth sign-in (Authlib); applications ask
+  *"What is your research interest, and why do you want to collaborate?"*
+  and are scored 1–10 by a Groq-hosted LLM on curiosity and willingness to
+  collaborate (scores ≥ 7 auto-approve; lower scores are rejected with an
+  optional e-mail notification)
 - **Admin dashboard** (`/admin`) — create, edit, publish and delete every piece
   of site content without touching code
 - **Content seeded from the original ADHAYAN repository** — 9 cofounders,
@@ -35,7 +44,8 @@ source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
 # 2. configuration
-cp .env.example .env               # then edit SECRET_KEY and SITE_URL
+cp .env.example .env               # then edit SECRET_KEY, SITE_URL,
+                                   # GOOGLE_CLIENT_ID/SECRET and GROQ_API_KEY
 
 # 3. database, admin account, original content
 python scripts/init_db.py          # create tables
@@ -162,14 +172,17 @@ adhayan/
 
 ## License & content provenance
 
-This repository is released under a **proprietary source-available license**
-(see [`LICENSE`](LICENSE)). All rights reserved.
+Copyright (c) **October 15, 2026 Prashanna Tiwari**. All rights reserved.
+**Made by Prashanna Tiwari.**
 
-**The "ADHAYAN" name, acronym, logos, and branding are protected.** You may
-view and study this code, but you may **not** use the ADHAYAN name or branding
-for your own project, website, or organization, and you may not deploy this
-software as a public site that impersonates the official ADHAYAN presence.
-Unauthorised use of the name or logos constitutes trademark infringement.
+This repository is released under a **proprietary all-rights-reserved
+license** (see [`LICENSE`](LICENSE)). It is **not** open source. You may view
+the code for personal study, but you may **not** copy, redeploy, rebrand,
+redistribute, or use it as a template for another site.
+
+**The "ADHAYAN" name, acronym, logos, and branding are protected.** Unauthorised
+use of the name or logos constitutes trademark infringement. Removing or
+altering the "Made by Prashanna Tiwari" attribution is prohibited.
 
 Organisational copy, founder biographies, project descriptions and
 announcements originate from the ADHAYAN team's own materials in the

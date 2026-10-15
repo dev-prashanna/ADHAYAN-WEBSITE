@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% from "_macros.html" import page_header %}
+
+{% block content %}
+{{ page_header('ADHAYAN / SUBMIT RESEARCH', page_title, 'Share your independent research as a preprint. It becomes publicly available once submitted.') }}
+
+<section class="section">
+  <div class="shell grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
+    <div class="card p-7 reveal sm:p-10">
+      <h2 class="display-md">Upload a paper</h2>
+      <p class="mt-3 text-sm text-mist-soft">All fields except DOI, links and references are required. The PDF can be up to 16 MB.</p>
+
+      <form method="post" action="{{ url_for('members.upload_research') }}" class="mt-8 space-y-5" enctype="multipart/form-data" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div>
+          <label class="field-label" for="title">Title</label>
+          {{ form.title(class_='field', id='title', placeholder='Paper title') }}
+          {% for error in form.title.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div>
+          <label class="field-label" for="abstract">Abstract</label>
+          {{ form.abstract(class_='field', id='abstract', rows='8', placeholder='Summarise the problem, method and findings…') }}
+          {% for error in form.abstract.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="keywords">Keywords <span class="normal-case tracking-normal text-mist-soft">(optional)</span></label>
+            {{ form.keywords(class_='field', id='keywords', placeholder='prompt injection, LLM security') }}
+          </div>
+          <div>
+            <label class="field-label" for="license">License</label>
+            {{ form.license(class_='field', id='license', placeholder='CC BY 4.0') }}
+          </div>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="github_url">GitHub repository <span class="normal-case tracking-normal text-mist-soft">(optional)</span></label>
+            {{ form.github_url(class_='field', id='github_url', placeholder='https://github.com/…') }}
+            {% for error in form.github_url.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+          </div>
+          <div>
+            <label class="field-label" for="dataset_url">Dataset link <span class="normal-case tracking-normal text-mist-soft">(optional)</span></label>
+            {{ form.dataset_url(class_='field', id='dataset_url', placeholder='https://…') }}
+            {% for error in form.dataset_url.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+          </div>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="software_language">Software language <span class="normal-case tracking-normal text-mist-soft">(optional)</span></label>
+            {{ form.software_language(class_='field', id='software_language', placeholder='Python') }}
+          </div>
+          <div>
+            <label class="field-label" for="software_status">Software status <span class="normal-case tracking-normal text-mist-soft">(optional)</span></label>
+            {{ form.software_status(class_='field', id='software_status', placeholder='Active') }}
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label" for="doi">DOI <span class="normal-case tracking-normal text-mist-soft">(optional)</span></label>
+          {{ form.doi(class_='field', id='doi', placeholder='10.5281/zenodo.xxxxxxx') }}
+        </div>
+
+        <div>
+          <label class="field-label" for="references">References <span class="normal-case tracking-normal text-mist-soft">(optional, one per line)</span></label>
+          {{ form.references(class_='field', id='references', rows='4', placeholder='Author, Title, Venue (Year)') }}
+        </div>
+
+        <div>
+          <label class="field-label" for="pdf_upload">PDF file</label>
+          {{ form.pdf_upload(class_='field', id='pdf_upload', accept='application/pdf') }}
+          {% for error in form.pdf_upload.errors %}<p class="mt-2 text-xs text-red-300">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div class="flex flex-wrap gap-3 pt-2">
+          <button type="submit" class="btn-primary">Publish research</button>
+          <a href="{{ url_for('members.account') }}" class="btn-ghost">Cancel</a>
+        </div>
+      </form>
+    </div>
+
+    <aside class="space-y-5">
+      <div class="card card-glow p-7 reveal">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Before you publish</p>
+        <ul class="mt-4 space-y-3 text-sm leading-relaxed text-mist">
+          <li>Only upload work you have the right to share.</li>
+          <li>Papers are visible to everyone and indexed publicly.</li>
+          <li>Link your code and dataset so others can reproduce your results.</li>
+        </ul>
+      </div>
+      <div class="card p-7 reveal">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft">Signed in as</p>
+        <p class="mt-3 text-sm text-mist-bright">{{ member.name or member.email }}</p>
+        <p class="mt-1 text-xs text-mist-soft">{{ member.email }}</p>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

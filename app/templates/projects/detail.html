@@ -38,6 +38,14 @@
         <img src="{{ project.cover_image if project.cover_image.startswith(('http', '/static/')) else url_for('public.media', filename=project.cover_image) }}"
              alt="{{ project.title }}" loading="lazy" decoding="async"
              class="mb-10 w-full rounded-2xl border border-white/10 object-cover">
+        {% if project.cover_credit %}
+        <p class="-mt-7 mb-10 text-xs text-mist-soft">
+          Illustrative cover:
+          <a href="{{ project.cover_credit.source }}" target="_blank" rel="noopener noreferrer" class="underline">{{ project.cover_credit.author }}</a>
+          · <a href="{{ project.cover_credit.license_url }}" target="_blank" rel="noopener noreferrer" class="underline">{{ project.cover_credit.license }}</a>
+          · Resized and converted to WebP.
+        </p>
+        {% endif %}
       {% endif %}
 
       <div class="prose-adhayan">{{ project.description|markdown }}</div>

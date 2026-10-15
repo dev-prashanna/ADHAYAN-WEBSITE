@@ -20,6 +20,7 @@ def create_app(config_object=None) -> Flask:
 
     _register_extensions(app)
     _register_blueprints(app)
+    _register_oauth(app)
     _register_template_helpers(app)
     _register_error_handlers(app)
     _register_security_headers(app)
@@ -55,11 +56,20 @@ def _register_extensions(app: Flask) -> None:
 def _register_blueprints(app: Flask) -> None:
     from app.routes.admin import admin_bp
     from app.routes.auth import auth_bp
+    from app.routes.members import members_bp
     from app.routes.public import public_bp
 
     app.register_blueprint(public_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(members_bp)
     app.register_blueprint(admin_bp, url_prefix="/admin")
+
+
+def _register_oauth(app: Flask) -> None:
+    """Set up Google OAuth for member sign-in (no-op until configured)."""
+    from app.routes.members import init_oauth
+
+    init_oauth(app)
 
 
 def _register_template_helpers(app: Flask) -> None:
@@ -108,6 +118,7 @@ def _register_template_helpers(app: Flask) -> None:
     @app.context_processor
     def inject_globals():
         from app.models import TeamMember
+        from app.utils.members import current_member
 
         site_settings = settings()
         base = (site_settings.get("site_url") or app.config.get("SITE_URL") or "").rstrip("/")
@@ -118,6 +129,7 @@ def _register_template_helpers(app: Flask) -> None:
             "current_year": datetime.utcnow().year,
             "nav_team_count": TeamMember.query.filter_by(is_active=True).count(),
             "request_path": request.path,
+            "current_member": current_member(),
         }
 
 
